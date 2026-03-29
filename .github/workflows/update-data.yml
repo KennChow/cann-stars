@@ -2,8 +2,13 @@ name: Daily Data Update
 
 on:
   schedule:
-    - cron: '0 14 * * *'   # 22:00 CST（UTC+8 = UTC 14:00）
-  workflow_dispatch:         # 支持手动触发
+    - cron: '0 14 * * *'   # 22:00 CST（UTC+8 = UTC 14:00），每天增量更新
+  workflow_dispatch:
+    inputs:
+      full_refresh:
+        description: '是否全量刷新用户画像（清空 user_profiles.json）'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -21,7 +26,9 @@ jobs:
         with:
           python-version: '3.11'
 
-      # 清除每日需要刷新的缓存，保留 user_profiles.json（采集耗时，变化慢）
+      # 每天清除：repos、stars、mrs、issues、聚合文件
+      # user_profiles.json 默认保留（仅增量追加新用户）
+      # 手动触发时可选择全量刷新用户画像
       - name: Clear stale caches
         run: |
           rm -f data/repos.json
@@ -30,6 +37,10 @@ jobs:
           rm -rf data/stars/
           rm -rf data/mrs/
           rm -rf data/issues/
+          if [ "${{ github.event.inputs.full_refresh }}" = "true" ]; then
+            echo "全量刷新：清除 user_profiles.json"
+            rm -f data/user_profiles.json
+          fi
 
       - name: Collect repos
         run: python collector.py repos
