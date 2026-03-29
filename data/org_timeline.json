@@ -1,0 +1,72 @@
+[
+  {
+    "month": "2025-09",
+    "new_stars": 1809,
+    "cumulative": 1809,
+    "contributor": 748,
+    "questioner": 164,
+    "developer": 324,
+    "star_enthusiast": 519,
+    "die_hard_fan": 54
+  },
+  {
+    "month": "2025-10",
+    "new_stars": 934,
+    "cumulative": 2743,
+    "contributor": 358,
+    "questioner": 86,
+    "developer": 198,
+    "star_enthusiast": 195,
+    "die_hard_fan": 97
+  },
+  {
+    "month": "2025-11",
+    "new_stars": 562,
+    "cumulative": 3305,
+    "contributor": 227,
+    "questioner": 57,
+    "developer": 106,
+    "star_enthusiast": 76,
+    "die_hard_fan": 96
+  },
+  {
+    "month": "2025-12",
+    "new_stars": 7019,
+    "cumulative": 10324,
+    "contributor": 4112,
+    "questioner": 670,
+    "developer": 1253,
+    "star_enthusiast": 821,
+    "die_hard_fan": 163
+  },
+  {
+    "month": "2026-01",
+    "new_stars": 774,
+    "cumulative": 11098,
+    "contributor": 351,
+    "questioner": 76,
+    "developer": 186,
+    "star_enthusiast": 84,
+    "die_hard_fan": 77
+  },
+  {
+    "month": "2026-02",
+    "new_stars": 535,
+    "cumulative": 11633,
+    "contributor": 262,
+    "questioner": 50,
+    "developer": 77,
+    "star_enthusiast": 85,
+    "die_hard_fan": 61
+  },
+  {
+    "month": "2026-03",
+    "new_stars": 1013,
+    "cumulative": 12646,
+    "contributor": 439,
+    "questioner": 68,
+    "developer": 228,
+    "star_enthusiast": 154,
+    "die_hard_fan": 124
+  }
+]

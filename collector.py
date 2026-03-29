@@ -7,7 +7,11 @@ CANN GitCode 数据采集器
     python collector.py stars          # 采集所有仓库的 star 用户列表
     python collector.py users          # 采集所有 star 用户的画像数据
     python collector.py activities     # 采集各仓库 MR/Issue 作者（区分贡献者/提问者）
+    python collector.py issues         # 采集各仓库所有 Issue（含关闭时间）
+    python collector.py mrs            # 采集各仓库 MR 详情（含时间戳）
+    python collector.py weekly         # 生成周粒度活跃度数据
     python collector.py reclassify     # 补充贡献数据并重新分类
+    python collector.py overview       # 生成概览聚合数据
     python collector.py all            # 顺序执行以上所有步骤
     python collector.py report         # 生成分析报告（需先完成采集）
 """
@@ -474,6 +478,253 @@ def reclassify_users():
         print(f"    {t}: {n} ({n/len(profiles)*100:.1f}%)")
 
 
+# ─── 步骤 4：采集各仓库 Issue 详情 ───────────────────────────────────────────
+
+def collect_issues():
+    """
+    采集所有仓库的完整 Issue 列表，保存创建时间和关闭时间，
+    用于计算 Issue 趋势和解决时长分布。
+    结果按仓库保存到 data/issues/{repo}.json。
+    """
+    print("\n=== 步骤 4：采集各仓库 Issue 详情 ===")
+
+    repos = load_json(DATA_DIR / "repos.json")
+    if not repos:
+        print("  请先运行 python collector.py repos")
+        return
+
+    issues_dir = DATA_DIR / "issues"
+    issues_dir.mkdir(exist_ok=True)
+
+    for repo in repos:
+        repo_path = repo["path"]
+        encoded   = urllib.parse.quote(repo_path, safe="")
+        safe_name = repo_path.replace("/", "__")
+        cache_file = issues_dir / f"{safe_name}.json"
+
+        if cache_file.exists():
+            existing = load_json(cache_file) or []
+            print(f"  {repo_path}: 使用缓存（{len(existing)} 条）")
+            continue
+
+        all_issues = []
+        total      = None
+        page       = 1
+
+        while True:
+            url  = f"{BASE_URL}/api/v1/issue/{encoded}/issues?page={page}&per_page=100&state=all"
+            data = get(url)
+            if not data or not data.get("issues"):
+                break
+
+            if total is None:
+                total = data.get("all") or 0
+
+            for issue in data["issues"]:
+                closed_raw = issue.get("closed_at") or ""
+                all_issues.append({
+                    "iid":        issue.get("iid"),
+                    "state":      issue.get("state", "opened"),
+                    "created_at": (issue.get("created_at") or "")[:10],
+                    "closed_at":  closed_raw[:10] if closed_raw else "",
+                    "author":     (issue.get("author") or {}).get("username", ""),
+                })
+
+            if total and len(all_issues) >= total or len(data["issues"]) < 100:
+                break
+            page += 1
+            time.sleep(REQUEST_DELAY)
+
+        save_json(cache_file, all_issues)
+        print(f"  {repo_path}: 共 {len(all_issues)} 条（open={repo['open_issues_count']}）")
+        time.sleep(REQUEST_DELAY)
+
+    print("\n  ✓ 各仓库 Issue 已保存到 data/issues/")
+
+
+# ─── 步骤 5：采集各仓库 MR 详情 ───────────────────────────────────────────────
+
+def collect_mrs():
+    """
+    采集所有仓库的完整 MR 列表，保存创建时间、合并时间、状态和作者，
+    用于计算 MR 趋势和周粒度活跃度分析。
+    结果按仓库保存到 data/mrs/{repo}.json。
+    """
+    print("\n=== 步骤 5：采集各仓库 MR 详情 ===")
+
+    repos = load_json(DATA_DIR / "repos.json")
+    if not repos:
+        print("  请先运行 python collector.py repos")
+        return
+
+    mrs_dir = DATA_DIR / "mrs"
+    mrs_dir.mkdir(exist_ok=True)
+
+    for repo in repos:
+        repo_id   = repo["id"]
+        repo_path = repo["path"]
+        safe_name = repo_path.replace("/", "__")
+        cache_file = mrs_dir / f"{safe_name}.json"
+
+        if cache_file.exists():
+            existing = load_json(cache_file) or []
+            print(f"  {repo_path}: 使用缓存（{len(existing)} 条）")
+            continue
+
+        all_mrs = []
+        total   = None
+        page    = 1
+
+        while True:
+            url  = f"{BASE_URL}/api/v1/projects/{repo_id}/merge_requests?page={page}&per_page=100&state=all"
+            data = get(url)
+            if not data or not data.get("content"):
+                break
+
+            if total is None:
+                total = data.get("total") or 0
+
+            for mr in data["content"]:
+                merged_raw = mr.get("merged_at") or ""
+                closed_raw = mr.get("closed_at") or ""
+                all_mrs.append({
+                    "iid":        mr.get("iid"),
+                    "state":      mr.get("state", "opened"),
+                    "created_at": (mr.get("created_at") or "")[:10],
+                    "merged_at":  merged_raw[:10] if merged_raw else "",
+                    "closed_at":  closed_raw[:10] if closed_raw else "",
+                    "author":     (mr.get("author") or {}).get("username", ""),
+                })
+
+            if (total and len(all_mrs) >= total) or len(data["content"]) < 100:
+                break
+            page += 1
+            time.sleep(REQUEST_DELAY)
+
+        save_json(cache_file, all_mrs)
+        print(f"  {repo_path}: 共 {len(all_mrs)} 条 MR（open_mr={repo['open_mr_count']}）")
+        time.sleep(REQUEST_DELAY)
+
+    print("\n  ✓ 各仓库 MR 已保存到 data/mrs/")
+
+
+# ─── 步骤 6：生成周粒度活跃度数据 ─────────────────────────────────────────────
+
+def generate_weekly_activity():
+    """
+    基于 data/mrs/ 中的数据，按 ISO 周统计各仓库的 MR 创建数量。
+    结果保存到 data/weekly_activity.json，供前端热力图使用。
+    """
+    print("\n=== 生成周粒度活跃度数据 ===")
+
+    mrs_dir = DATA_DIR / "mrs"
+    if not mrs_dir.exists():
+        print("  缺少 data/mrs/ 目录，请先运行 python collector.py mrs")
+        return
+
+    # repo_path -> {week_str -> count}
+    repo_weekly = {}
+
+    for f in sorted(mrs_dir.glob("*.json")):
+        repo_path = f.stem.replace("__", "/", 1)
+        mrs = load_json(f) or []
+        weekly = {}
+        for mr in mrs:
+            created = mr.get("created_at", "")
+            if not created or len(created) < 10:
+                continue
+            try:
+                dt = datetime.fromisoformat(created)
+            except (ValueError, AttributeError):
+                try:
+                    dt = datetime.strptime(created[:10], "%Y-%m-%d")
+                except ValueError:
+                    continue
+            year, week, _ = dt.isocalendar()
+            week_str = f"{year}-W{week:02d}"
+            weekly[week_str] = weekly.get(week_str, 0) + 1
+        repo_weekly[repo_path] = weekly
+
+    # 收集所有出现的周并排序
+    all_weeks = set()
+    for weekly in repo_weekly.values():
+        all_weeks.update(weekly.keys())
+    sorted_weeks = sorted(all_weeks)
+
+    # 按总 MR 数降序排列仓库
+    repo_totals = [(path, sum(w.values())) for path, w in repo_weekly.items()]
+    repo_totals.sort(key=lambda x: x[1], reverse=True)
+
+    result = {
+        "weeks": sorted_weeks,
+        "repos": [
+            {
+                "name":  path.split("/")[1],
+                "path":  path,
+                "total": total,
+                "data":  [repo_weekly[path].get(w, 0) for w in sorted_weeks],
+            }
+            for path, total in repo_totals
+        ],
+        "generated_at": datetime.now().strftime("%Y-%m-%d"),
+    }
+
+    save_json(DATA_DIR / "weekly_activity.json", result)
+    print(f"  ✓ 共 {len(sorted_weeks)} 个周，{len(result['repos'])} 个仓库，已保存到 data/weekly_activity.json")
+    return result
+
+
+# ─── 概览聚合数据 ────────────────────────────────────────────────────────────
+
+def generate_overview_data():
+    """
+    聚合全组织 Star 时间线数据，按月统计各类型用户的新增 star 数。
+    结果保存到 data/org_timeline.json，供前端直接使用。
+    """
+    print("\n=== 生成概览聚合数据 ===")
+
+    profiles = load_json(DATA_DIR / "user_profiles.json") or []
+    profile_map = {p["user_name"]: p.get("user_type", "die_hard_fan") for p in profiles}
+
+    stars_dir = DATA_DIR / "stars"
+    if not stars_dir.exists():
+        print("  缺少 data/stars/ 目录，请先运行 python collector.py stars")
+        return
+
+    # month -> type -> count（每月新增 star 事件，含跨仓库重复）
+    monthly = {}
+    total_events = 0
+
+    for f in sorted(stars_dir.glob("*.json")):
+        users = load_json(f) or []
+        for u in users:
+            created_at = u.get("created_at", "")
+            if not created_at or len(created_at) < 7:
+                continue
+            ym    = created_at[:7]
+            uname = u.get("user_name", "")
+            utype = profile_map.get(uname, "die_hard_fan")
+            if ym not in monthly:
+                monthly[ym] = {"contributor": 0, "questioner": 0, "developer": 0,
+                               "star_enthusiast": 0, "die_hard_fan": 0}
+            monthly[ym][utype] = monthly[ym].get(utype, 0) + 1
+            total_events += 1
+
+    # 按月排序并计算累计
+    sorted_months = sorted(monthly.keys())
+    cumulative = 0
+    result = []
+    for ym in sorted_months:
+        m = monthly[ym]
+        new = sum(m.values())
+        cumulative += new
+        result.append({"month": ym, "new_stars": new, "cumulative": cumulative, **m})
+
+    save_json(DATA_DIR / "org_timeline.json", result)
+    print(f"  ✓ 共 {len(result)} 个月，{total_events} 条 star 事件，已保存到 data/org_timeline.json")
+    return result
+
+
 # ─── 步骤 4：生成报告 ─────────────────────────────────────────────────────────
 
 def generate_report():
@@ -602,14 +853,26 @@ def main():
         collect_users()
     elif cmd == "activities":
         collect_activities()
+    elif cmd == "issues":
+        collect_issues()
+    elif cmd == "mrs":
+        collect_mrs()
+    elif cmd == "weekly":
+        generate_weekly_activity()
     elif cmd == "reclassify":
         reclassify_users()
+    elif cmd == "overview":
+        generate_overview_data()
     elif cmd == "all":
         collect_repos()
         collect_stars()
         collect_users()
         collect_activities()
+        collect_issues()
+        collect_mrs()
         reclassify_users()
+        generate_overview_data()
+        generate_weekly_activity()
         generate_report()
     elif cmd == "report":
         generate_report()
