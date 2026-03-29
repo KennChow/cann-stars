@@ -229,22 +229,23 @@ def classify_user(profile):
     """
     判断用户类型。
 
-    - developer：有创建的原创仓库（非纯 fork）或有明显贡献活动
-    - casual：有一定关注/被关注，有少量活动
-    - ghost：三无用户——无粉丝、无原创仓库、无任何贡献活动
+    - developer：年贡献 >= 1（含 PR/commit/issue）或有原创仓库（代理指标）
+    - star_enthusiast：无贡献活动，但 star 了多个 CANN 仓库（Star 爱好者）
+    - die_hard_fan：无贡献活动，只 star 了某一个 CANN 仓库（铁粉）
+
+    注：对于 fans>0 或 repos>0 但未实际查询贡献数据的用户，
+    用 original_repo_count >= 1 作为开发者代理指标。
     """
-    fans = profile.get("fans_count", 0)
-    follows = profile.get("follow_count", 0)
     original_repos = profile.get("original_repo_count", 0)
     total_contributions = profile.get("total_contributions", 0)
-    star_repo_count = len(profile.get("starred_repos", []))
+    starred_count = len(profile.get("starred_repos", []))
 
-    if original_repos >= 2 or total_contributions >= 10 or fans >= 5:
+    if total_contributions >= 1 or original_repos >= 1:
         return "developer"
-    elif original_repos >= 1 or total_contributions >= 1 or fans >= 1 or follows >= 3:
-        return "casual"
+    elif starred_count >= 2:
+        return "star_enthusiast"  # Star 爱好者
     else:
-        return "ghost"  # 三无用户
+        return "die_hard_fan"  # 铁粉
 
 
 def collect_users():

@@ -48,7 +48,7 @@
     <div class="chart" id="chart-user-type"></div>
   </div>
   <div class="chart-box">
-    <h2>各仓库三无用户占比 Top 20</h2>
+    <h2>各仓库非开发者占比 Top 20</h2>
     <div class="chart" id="chart-ghost-rate"></div>
   </div>
   <div class="chart-box">
@@ -66,8 +66,8 @@
 <script>
 const COLORS = {
   developer: '#5b8def',
-  casual: '#4ecdc4',
-  ghost: '#e05f5f',
+  star_enthusiast: '#4ecdc4',
+  die_hard_fan: '#f5a623',
   star: '#f5c842',
   fork: '#4ecdc4',
   issue: '#e05f5f',
@@ -96,7 +96,7 @@ async function main() {
   const totalStars  = repos.reduce((s, r) => s + r.star_count, 0);
   const totalForks  = repos.reduce((s, r) => s + r.forks_count, 0);
   const totalIssues = repos.reduce((s, r) => s + r.open_issues_count, 0);
-  const typeCounts  = { developer: 0, casual: 0, ghost: 0 };
+  const typeCounts  = { developer: 0, star_enthusiast: 0, die_hard_fan: 0 };
   profiles.forEach(p => { typeCounts[p.user_type] = (typeCounts[p.user_type] || 0) + 1; });
 
   document.getElementById('stats-row').innerHTML = [
@@ -136,7 +136,7 @@ async function main() {
   // ── 图2：用户类型饼图 ─────────────────────────────────
   {
     const chart = makeChart('chart-user-type');
-    const labels = { developer: '开发者', casual: '普通用户', ghost: '三无用户' };
+    const labels = { developer: '开发者', star_enthusiast: 'Star 爱好者', die_hard_fan: '铁粉' };
     chart.setOption({
       tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
       legend: { bottom: 0, textStyle: { color: '#aaa' } },
@@ -160,8 +160,8 @@ async function main() {
         const rpath = r.path;
         const repoUsers = allUsers.filter(u => u.starred_repos.includes(rpath));
         const profiled  = repoUsers.filter(u => profileMap[u.user_name]);
-        const ghosts    = profiled.filter(u => profileMap[u.user_name]?.user_type === 'ghost');
-        const rate = profiled.length > 0 ? ghosts.length / profiled.length * 100 : 0;
+        const nonDev    = profiled.filter(u => profileMap[u.user_name]?.user_type !== 'developer');
+        const rate = profiled.length > 0 ? nonDev.length / profiled.length * 100 : 0;
         return { name: rpath.split('/')[1], rate, profiled: profiled.length };
       })
       .filter(r => r.profiled >= 5)
@@ -170,7 +170,7 @@ async function main() {
 
     const chart = makeChart('chart-ghost-rate');
     chart.setOption({
-      tooltip: { trigger: 'axis', formatter: p => `${p[0].name}<br/>三无占比: ${p[0].value.toFixed(1)}%` },
+      tooltip: { trigger: 'axis', formatter: p => `${p[0].name}<br/>非开发者占比: ${p[0].value.toFixed(1)}%` },
       grid: { left: 10, right: 20, bottom: 80, containLabel: true },
       xAxis: { type: 'category', data: rows.map(r => r.name), axisLabel: { rotate: 40, color: '#aaa', fontSize: 11 } },
       yAxis: { type: 'value', axisLabel: { color: '#aaa', formatter: '{value}%' }, max: 50 },
