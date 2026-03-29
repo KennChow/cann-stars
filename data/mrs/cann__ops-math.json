@@ -1,9 +1,17 @@
 [
   {
-    "iid": 1980,
+    "iid": 1981,
     "state": "opened",
     "created_at": "2026-03-29",
     "merged_at": "",
+    "closed_at": "",
+    "author": "gh_M"
+  },
+  {
+    "iid": 1980,
+    "state": "merged",
+    "created_at": "2026-03-29",
+    "merged_at": "2026-03-29",
     "closed_at": "",
     "author": "caoyan_huawei"
   },

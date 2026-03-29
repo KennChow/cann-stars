@@ -15791,8 +15791,10 @@
       "cann/ops-nn",
       "cann/cann-recipes-infer",
       "cann/opbase",
+      "cann/pypto",
       "cann/ops-cv",
       "cann/skills",
+      "cann/asc-devkit",
       "cann/asnumpy",
       "cann/cann-samples"
     ]
