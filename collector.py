@@ -6,7 +6,9 @@ CANN GitCode 数据采集器
     python collector.py repos          # 采集所有仓库基本信息
     python collector.py stars          # 采集所有仓库的 star 用户列表
     python collector.py users          # 采集所有 star 用户的画像数据
-    python collector.py all            # 顺序执行以上三步
+    python collector.py activities     # 采集各仓库 MR/Issue 作者（区分贡献者/提问者）
+    python collector.py reclassify     # 补充贡献数据并重新分类
+    python collector.py all            # 顺序执行以上所有步骤
     python collector.py report         # 生成分析报告（需先完成采集）
 """
 
@@ -225,27 +227,34 @@ def collect_stars():
 
 # ─── 步骤 3：采集用户画像 ─────────────────────────────────────────────────────
 
-def classify_user(profile):
+def classify_user(profile, mr_authors=None, issue_authors=None):
     """
     判断用户类型。
 
-    - developer：年贡献 >= 1（含 PR/commit/issue）或有原创仓库（代理指标）
-    - star_enthusiast：无贡献活动，但 star 了多个 CANN 仓库（Star 爱好者）
-    - die_hard_fan：无贡献活动，只 star 了某一个 CANN 仓库（铁粉）
+    开发者（有 GitCode 贡献活动）进一步细分：
+    - contributor：在 CANN 仓库提交过 MR/PR（贡献者）
+    - questioner：在 CANN 仓库提过 Issue，但无 MR（提问者）
+    - developer：有 GitCode 贡献，但无 CANN 特定 MR/Issue（开发者）
 
-    注：对于 fans>0 或 repos>0 但未实际查询贡献数据的用户，
-    用 original_repo_count >= 1 作为开发者代理指标。
+    非开发者（无贡献活动）：
+    - star_enthusiast：Star 了多个 CANN 仓库（Star 爱好者）
+    - die_hard_fan：只 Star 了某一个 CANN 仓库（铁粉）
     """
-    original_repos = profile.get("original_repo_count", 0)
     total_contributions = profile.get("total_contributions", 0)
     starred_count = len(profile.get("starred_repos", []))
+    uname = profile.get("user_name", "")
 
-    if total_contributions >= 1 or original_repos >= 1:
-        return "developer"
+    if total_contributions >= 1:
+        if mr_authors and uname in mr_authors:
+            return "contributor"     # 贡献者
+        elif issue_authors and uname in issue_authors:
+            return "questioner"      # 提问者
+        else:
+            return "developer"       # 开发者（无 CANN 特定活动）
     elif starred_count >= 2:
-        return "star_enthusiast"  # Star 爱好者
+        return "star_enthusiast"     # Star 爱好者
     else:
-        return "die_hard_fan"  # 铁粉
+        return "die_hard_fan"        # 铁粉
 
 
 def collect_users():
@@ -309,13 +318,12 @@ def collect_users():
                 profile["original_repo_count"] = max(0, total_repos - 20)
         time.sleep(USER_REQUEST_DELAY)
 
-        # 3. 贡献活动只在 fans=0 且 repos=0 时才需要（快速判断三无）
-        if profile["fans_count"] == 0 and profile["original_repo_count"] == 0:
-            url = f"{BASE_URL}/uc/api/v1/events/{uname}/contributions"
-            data = get(url)
-            if data and isinstance(data, dict) and "error_code" not in data:
-                profile["total_contributions"] = sum(v for v in data.values() if isinstance(v, int))
-            time.sleep(USER_REQUEST_DELAY)
+        # 3. 贡献活动（所有用户都需要获取，是区分开发者的唯一依据）
+        url = f"{BASE_URL}/uc/api/v1/events/{uname}/contributions"
+        data = get(url)
+        if data and isinstance(data, dict) and "error_code" not in data:
+            profile["total_contributions"] = sum(v for v in data.values() if isinstance(v, int))
+        time.sleep(USER_REQUEST_DELAY)
 
         profile["user_type"] = classify_user(profile)
         profiles.append(profile)
@@ -329,6 +337,141 @@ def collect_users():
     save_json(profiles_file, profiles)
     print(f"\n  ✓ 已保存 {len(profiles)} 位用户画像到 data/user_profiles.json")
     return profiles
+
+
+# ─── 步骤 3.5：采集各仓库 MR / Issue 作者 ────────────────────────────────────
+
+def collect_activities():
+    """
+    遍历所有 CANN 仓库，抓取 MR 和 Issue 的作者用户名。
+    用于将"开发者"进一步区分为"贡献者"（有 MR）和"提问者"（有 Issue，无 MR）。
+    结果保存到 data/activity_users.json。
+    """
+    print("\n=== 步骤 3.5：采集 MR / Issue 作者 ===")
+
+    repos = load_json(DATA_DIR / "repos.json")
+    if not repos:
+        print("  请先运行 python collector.py repos")
+        return
+
+    mr_authors = set()
+    issue_authors = set()
+
+    for repo in repos:
+        repo_id   = repo["id"]
+        repo_path = repo["path"]
+        encoded   = urllib.parse.quote(repo_path, safe="")
+
+        # ── MR 作者 ──────────────────────────────────────────
+        mr_page = 1
+        mr_count = 0
+        while True:
+            url  = f"{BASE_URL}/api/v1/projects/{repo_id}/merge_requests?page={mr_page}&per_page=100&state=all"
+            data = get(url)
+            if not data or not data.get("content"):
+                break
+            for mr in data["content"]:
+                uname = (mr.get("author") or {}).get("username")
+                if uname:
+                    mr_authors.add(uname)
+                    mr_count += 1
+            total = data.get("total") or 0
+            if len(mr_authors) >= total or len(data["content"]) < 100:
+                break
+            mr_page += 1
+            time.sleep(REQUEST_DELAY)
+
+        # ── Issue 作者 ───────────────────────────────────────
+        issue_page = 1
+        issue_count = 0
+        while True:
+            url  = f"{BASE_URL}/api/v1/issue/{encoded}/issues?page={issue_page}&per_page=100&state=all"
+            data = get(url)
+            if not data or not data.get("issues"):
+                break
+            for issue in data["issues"]:
+                uname = (issue.get("author") or {}).get("username")
+                if uname:
+                    issue_authors.add(uname)
+                    issue_count += 1
+            total = data.get("all") or 0
+            if issue_count >= total or len(data["issues"]) < 100:
+                break
+            issue_page += 1
+            time.sleep(REQUEST_DELAY)
+
+        print(f"  {repo_path}: MR作者 +{mr_count}  Issue作者 +{issue_count}  "
+              f"（累计 MR={len(mr_authors)} Issue={len(issue_authors)}）")
+        time.sleep(REQUEST_DELAY)
+
+    result = {
+        "mr_authors":    sorted(mr_authors),
+        "issue_authors": sorted(issue_authors),
+    }
+    save_json(DATA_DIR / "activity_users.json", result)
+    print(f"\n  ✓ MR 作者 {len(mr_authors)} 位，Issue 作者 {len(issue_authors)} 位")
+    print(f"    已保存到 data/activity_users.json")
+    return result
+
+
+# ─── 补充步骤：对已有画像重新抓取贡献并重分类 ─────────────────────────────────
+
+def reclassify_users():
+    """
+    对已采集的用户画像中，之前因有原创仓库而跳过贡献抓取的用户，
+    补充抓取 total_contributions，然后重新运行 classify_user。
+    结果原地更新 data/user_profiles.json。
+    """
+    print("\n=== 补充：重新采集贡献数据并重分类 ===")
+
+    profiles_file = DATA_DIR / "user_profiles.json"
+    profiles = load_json(profiles_file)
+    if not profiles:
+        print("  缺少 user_profiles.json，请先运行 python collector.py users")
+        return
+
+    # 找出需要补充抓取的用户：original_repo_count > 0 但 total_contributions == 0
+    # 这类用户之前因为有仓库而跳过了贡献抓取
+    need_refetch = [p for p in profiles if p.get("original_repo_count", 0) > 0 and p.get("total_contributions", 0) == 0]
+    print(f"  需要补充抓取贡献的用户：{len(need_refetch)} 位")
+
+    for i, p in enumerate(need_refetch):
+        uname = p["user_name"]
+        url = f"{BASE_URL}/uc/api/v1/events/{uname}/contributions"
+        data = get(url)
+        if data and isinstance(data, dict) and "error_code" not in data:
+            p["total_contributions"] = sum(v for v in data.values() if isinstance(v, int))
+        if (i + 1) % 20 == 0 or i == len(need_refetch) - 1:
+            print(f"  [{i+1}/{len(need_refetch)}] {uname}: contributions={p['total_contributions']}")
+        time.sleep(USER_REQUEST_DELAY)
+
+    # 加载 MR/Issue 作者数据（若存在）
+    activity = load_json(DATA_DIR / "activity_users.json") or {}
+    mr_authors    = set(activity.get("mr_authors", []))
+    issue_authors = set(activity.get("issue_authors", []))
+    if mr_authors or issue_authors:
+        print(f"  已加载活动数据：MR作者 {len(mr_authors)} 位，Issue作者 {len(issue_authors)} 位")
+
+    # 重新分类所有用户
+    changed = 0
+    for p in profiles:
+        old_type = p.get("user_type")
+        new_type = classify_user(p, mr_authors, issue_authors)
+        if old_type != new_type:
+            changed += 1
+        p["user_type"] = new_type
+
+    save_json(profiles_file, profiles)
+    print(f"\n  ✓ 重分类完成，共 {changed} 位用户类型发生变化，已保存到 data/user_profiles.json")
+
+    # 打印新的分布
+    type_counts = {}
+    for p in profiles:
+        t = p.get("user_type", "unknown")
+        type_counts[t] = type_counts.get(t, 0) + 1
+    print("\n  新类型分布：")
+    for t, n in sorted(type_counts.items()):
+        print(f"    {t}: {n} ({n/len(profiles)*100:.1f}%)")
 
 
 # ─── 步骤 4：生成报告 ─────────────────────────────────────────────────────────
@@ -457,10 +600,16 @@ def main():
         collect_stars()
     elif cmd == "users":
         collect_users()
+    elif cmd == "activities":
+        collect_activities()
+    elif cmd == "reclassify":
+        reclassify_users()
     elif cmd == "all":
         collect_repos()
         collect_stars()
         collect_users()
+        collect_activities()
+        reclassify_users()
         generate_report()
     elif cmd == "report":
         generate_report()
