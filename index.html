@@ -143,7 +143,7 @@
       </div>
     </div>
     <div class="chart-box">
-      <h2>各仓库非开发者占比 Top 20</h2>
+      <h2>各仓库非开发者占比 Top 20 <span style="font-size:11px;font-weight:400;color:#555;margin-left:6px">仅含 Star ≥ 100 的仓库</span></h2>
       <div class="chart" id="chart-ghost-rate"></div>
     </div>
     <div class="chart-box">
@@ -238,7 +238,7 @@ const TYPE_LABELS = {
   die_hard_fan:   '铁粉',
 };
 
-const DATA_VER = '?v=10';
+const DATA_VER = '?v=11';
 async function loadJSON(path) {
   const r = await fetch(path + DATA_VER);
   return r.json();
@@ -401,7 +401,7 @@ async function main() {
   // 图3：各仓库非开发者占比
   {
     const rows = repos
-      .filter(r => r.star_count > 0)
+      .filter(r => r.star_count >= 100)
       .map(r => {
         const users    = repoUserMap[r.path] || [];
         const profiled = users.filter(u => profileMap[u.user_name]);
