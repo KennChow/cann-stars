@@ -2,8 +2,7 @@
 /repos.json
 /repo_detail.json
 
-# 各仓库的 star 用户原始缓存（太多文件）
-data/stars/
+# 各仓库的 star 用户原始缓存现在需要用于时间图表，不再忽略
 
 # Claude 工作目录
 .claude/
