@@ -610,6 +610,49 @@ def collect_mrs():
 
 # ─── 步骤 6：生成周粒度活跃度数据 ─────────────────────────────────────────────
 
+def generate_mr_summary():
+    """
+    基于 data/mrs/ 中的数据，按仓库统计 merged / open MR 数量（忽略 closed）。
+    结果保存到 data/mr_summary.json，供前端图表使用。
+    """
+    print("\n=== 生成 MR 状态汇总 ===")
+
+    mrs_dir = DATA_DIR / "mrs"
+    if not mrs_dir.exists():
+        print("  缺少 data/mrs/ 目录，请先运行 python collector.py mrs")
+        return
+
+    repos_data = []
+    all_authors = set()
+    for f in sorted(mrs_dir.glob("*.json")):
+        repo_path = f.stem.replace("__", "/", 1)
+        mrs = load_json(f) or []
+        merged = sum(1 for m in mrs if m.get("state") == "merged")
+        open_  = sum(1 for m in mrs if m.get("state") == "opened")
+        total  = merged + open_
+        for m in mrs:
+            if m.get("author"):
+                all_authors.add(m["author"])
+        if total > 0:
+            repos_data.append({
+                "name":   repo_path.split("/")[1],
+                "path":   repo_path,
+                "merged": merged,
+                "open":   open_,
+                "total":  total,
+            })
+
+    repos_data.sort(key=lambda x: x["total"], reverse=True)
+    result = {
+        "repos": repos_data,
+        "unique_authors": len(all_authors),
+        "generated_at": datetime.now().strftime("%Y-%m-%d"),
+    }
+    save_json(DATA_DIR / "mr_summary.json", result)
+    print(f"  ✓ 共 {len(repos_data)} 个仓库，{len(all_authors)} 位唯一 MR 提交者，已保存到 data/mr_summary.json")
+    return result
+
+
 def generate_weekly_activity():
     """
     基于 data/mrs/ 中的数据，按 ISO 周统计各仓库的 MR 创建数量。
@@ -857,6 +900,8 @@ def main():
         collect_issues()
     elif cmd == "mrs":
         collect_mrs()
+    elif cmd == "mr-summary":
+        generate_mr_summary()
     elif cmd == "weekly":
         generate_weekly_activity()
     elif cmd == "reclassify":
@@ -872,6 +917,7 @@ def main():
         collect_mrs()
         reclassify_users()
         generate_overview_data()
+        generate_mr_summary()
         generate_weekly_activity()
         generate_report()
     elif cmd == "report":

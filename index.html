@@ -212,20 +212,22 @@
       <div class="chart" id="chart-org-timeline" style="height:380px"></div>
     </div>
     <div class="chart-box chart-wide">
-      <h2>各仓库用户类型构成 Top 20 <span style="font-size:11px;font-weight:400;color:#555;margin-left:6px">按 Star 数排序，百分比堆叠</span></h2>
+      <h2 style="display:flex;align-items:center;flex-wrap:wrap;gap:8px">各仓库用户类型构成 Top 20
+        <span style="font-size:11px;font-weight:400;color:#555">按 Star 数排序</span>
+        <span style="margin-left:auto;display:inline-flex;border:1px solid var(--border-3);border-radius:16px;overflow:hidden;font-size:12px;font-weight:400">
+          <button id="comp-pct" style="padding:3px 12px;cursor:pointer;border:none;background:var(--accent);color:#fff;transition:all .2s">百分比</button>
+          <button id="comp-abs" style="padding:3px 12px;cursor:pointer;border:none;background:transparent;color:var(--text-2);transition:all .2s">绝对值</button>
+        </span>
+      </h2>
       <div class="chart" id="chart-repo-composition" style="height:440px"></div>
     </div>
     <div class="chart-box chart-wide" id="weekly-activity-box" style="display:none">
       <h2>各仓库 MR 周活跃度热力图 <span style="font-size:11px;font-weight:400;color:#555;margin-left:6px">按周统计 MR 新建数，最多显示近 26 周</span></h2>
       <div class="chart" id="chart-weekly-activity" style="height:520px;min-height:300px"></div>
     </div>
-    <div class="chart-box">
-      <h2>仓库 Star 数分布</h2>
-      <div class="chart" id="chart-star-dist"></div>
-    </div>
-    <div class="chart-box">
-      <h2>Star 多个仓库的用户数量</h2>
-      <div class="chart" id="chart-multi-star"></div>
+    <div class="chart-box chart-wide">
+      <h2>各仓库 MR 总数 Top 20 <span style="font-size:11px;font-weight:400;color:#555;margin-left:6px">按 MR 总数排序</span></h2>
+      <div class="chart" id="chart-mr-total" style="height:440px"></div>
     </div>
   </div>
   <p class="note" id="note"></p>
@@ -382,12 +384,13 @@ document.querySelectorAll('.tab').forEach(tab => {
 let repoTypeChart, repoTypeTimelineChart;
 
 async function main() {
-  const [repos, allUsers, profiles, orgTimeline, weeklyData] = await Promise.all([
+  const [repos, allUsers, profiles, orgTimeline, weeklyData, mrSummary] = await Promise.all([
     loadJSON('data/repos.json'),
     loadJSON('data/all_star_users.json'),
     loadJSON('data/user_profiles.json'),
     loadJSON('data/org_timeline.json'),
     loadJSON('data/weekly_activity.json').catch(() => null),
+    loadJSON('data/mr_summary.json').catch(() => null),
   ]);
 
   // 建立 user_name → profile 映射
@@ -415,12 +418,12 @@ async function main() {
   profiles.forEach(p => { typeCounts[p.user_type] = (typeCounts[p.user_type] || 0) + 1; });
 
   document.getElementById('stats-row').innerHTML = [
-    ['仓库总数',     repos.length, ''],
-    ['总 Star 数',   totalStars.toLocaleString(), ''],
-    ['总 Fork 数',   totalForks.toLocaleString(), ''],
-    ['开放 Issue',   totalIssues.toLocaleString(), ''],
+    ['仓库总数',       repos.length, ''],
+    ['总 Star 数',     totalStars.toLocaleString(), ''],
+    ['总 Fork 数',     totalForks.toLocaleString(), ''],
+    ['开放 Issue',     totalIssues.toLocaleString(), ''],
     ['唯一 Star 用户', allUsers.length.toLocaleString(), ''],
-    ['已画像用户',   profiles.length.toLocaleString(), `/ ${allUsers.length}`],
+    ['MR 提交者',      (mrSummary?.unique_authors ?? '–').toLocaleString(), ''],
   ].map(([lbl, val, sub]) =>
     `<div class="stat-card"><div class="val">${val}<small style="font-size:14px;color:#666">${sub}</small></div><div class="lbl">${lbl}</div></div>`
   ).join('');
@@ -547,38 +550,46 @@ async function main() {
     window.addEventListener('resize', () => chart.resize());
   }
 
-  // 图4：Star 数分布
+  // 图4：各仓库 MR 总数 Top 20（merged + open 堆叠）
   {
-    const buckets = [
-      { label: '1-9', min: 1, max: 10 }, { label: '10-49', min: 10, max: 50 },
-      { label: '50-99', min: 50, max: 100 }, { label: '100-199', min: 100, max: 200 },
-      { label: '200-499', min: 200, max: 500 }, { label: '500+', min: 500, max: Infinity },
-    ];
-    const chart = makeChart('chart-star-dist');
-    chart.setOption({
-      tooltip: { trigger: 'axis' },
-      grid: { left: 10, right: 20, containLabel: true },
-      xAxis: { type: 'category', data: buckets.map(b => b.label), axisLabel: { color: t('#aaa','#666') } },
-      yAxis: { type: 'value', axisLabel: { color: t('#aaa','#666') }, minInterval: 1 },
-      series: [{ type: 'bar', itemStyle: { color: COLORS.star }, label: { show: true, position: 'top', color: t('#aaa','#555') },
-        data: buckets.map(b => repos.filter(r => r.star_count >= b.min && r.star_count < b.max).length) }],
-    });
-    window.addEventListener('resize', () => chart.resize());
-  }
-
-  // 图5：多仓库 star 用户
-  {
-    const thresholds = [2, 5, 10, 20, 30, 39];
-    const chart = makeChart('chart-multi-star');
-    chart.setOption({
-      tooltip: { trigger: 'axis', formatter: p => `star ≥ ${thresholds[p[0].dataIndex]} 个仓库的用户：${p[0].value} 位` },
-      grid: { left: 10, right: 20, containLabel: true },
-      xAxis: { type: 'category', data: thresholds.map(n => n + '+'), axisLabel: { color: t('#aaa','#666') } },
-      yAxis: { type: 'value', axisLabel: { color: t('#aaa','#666') } },
-      series: [{ type: 'bar', itemStyle: { color: COLORS.star_enthusiast }, label: { show: true, position: 'top', color: t('#aaa','#555') },
-        data: thresholds.map(n => allUsers.filter(u => u.starred_repos.length >= n).length) }],
-    });
-    window.addEventListener('resize', () => chart.resize());
+    if (mrSummary && mrSummary.repos && mrSummary.repos.length > 0) {
+      const top20mr = mrSummary.repos.slice(0, 20).reverse(); // 已按 total 降序，reverse 后低→高
+      const names   = top20mr.map(r => r.name);
+      const chart   = makeChart('chart-mr-total');
+      chart.setOption({
+        tooltip: {
+          trigger: 'axis', axisPointer: { type: 'shadow' },
+          formatter: params => {
+            const merged = params.find(p => p.seriesName === 'Merged');
+            const open   = params.find(p => p.seriesName === 'Open');
+            const total  = (merged?.value || 0) + (open?.value || 0);
+            return `<b>${params[0].axisValue}</b><br/>`
+              + `${merged?.marker}Merged：${(merged?.value || 0).toLocaleString()}<br/>`
+              + `${open?.marker}Open：${(open?.value || 0).toLocaleString()}<br/>`
+              + `合计：${total.toLocaleString()}`;
+          },
+        },
+        legend: { data: ['Merged', 'Open'], textStyle: { color: t('#aaa','#555') }, top: 0 },
+        grid: { left: 10, right: 20, top: 36, bottom: 10, containLabel: true },
+        xAxis: { type: 'value', axisLabel: { color: t('#aaa','#666') } },
+        yAxis: { type: 'category', data: names, axisLabel: { color: t('#aaa','#666'), fontSize: 11 } },
+        series: [
+          {
+            name: 'Merged', type: 'bar', stack: 'total',
+            itemStyle: { color: '#5b8ff9' },
+            label: { show: false },
+            data: top20mr.map(r => r.merged),
+          },
+          {
+            name: 'Open', type: 'bar', stack: 'total',
+            itemStyle: { color: '#f6bd16' },
+            label: { show: false },
+            data: top20mr.map(r => r.open),
+          },
+        ],
+      });
+      window.addEventListener('resize', () => chart.resize());
+    }
   }
 
   // 图6：全组织 Star 增长趋势
@@ -624,54 +635,72 @@ async function main() {
     window.addEventListener('resize', () => chart.resize());
   }
 
-  // 图7：各仓库用户类型构成（Top 20，100% 堆叠）
+  // 图7：各仓库用户类型构成（Top 20，百分比/绝对值切换）
   {
     const DEV_TYPES = new Set(['contributor', 'questioner', 'developer']);
     const TYPE_KEYS = ['contributor', 'questioner', 'developer', 'star_enthusiast', 'die_hard_fan'];
-    const top20 = repos.filter(r => r.star_count > 0).slice(0, 20).reverse(); // 低→高，横向从下往上
+    const top20 = repos.filter(r => r.star_count > 0).slice(0, 20).reverse();
     const repoNames = top20.map(r => r.path.split('/')[1]);
 
-    // 计算各仓库各类型百分比
-    const typeData = {};
-    TYPE_KEYS.forEach(k => typeData[k] = []);
+    // 计算各仓库各类型的绝对值和百分比
+    const absData = {}, pctData = {};
+    TYPE_KEYS.forEach(k => { absData[k] = []; pctData[k] = []; });
     top20.forEach(r => {
       const users    = repoUserMap[r.path] || [];
       const profiled = users.filter(u => profileMap[u.user_name]);
       const rawSum   = profiled.length || 1;
-      // 先算各类型原始数量
       const counts = TYPE_KEYS.map(k =>
         profiled.filter(u => profileMap[u.user_name]?.user_type === k).length
       );
-      // 转百分比（保留1位小数）
       let pcts = counts.map(c => Math.round(c / rawSum * 1000) / 10);
-      // 修正舍入误差：让最大段吸收差值，保证合计严格等于 100
       const diff = +(100 - pcts.reduce((a, b) => a + b, 0)).toFixed(1);
       const maxIdx = pcts.indexOf(Math.max(...pcts));
       pcts[maxIdx] = +(pcts[maxIdx] + diff).toFixed(1);
-      TYPE_KEYS.forEach((k, i) => typeData[k].push(pcts[i]));
+      TYPE_KEYS.forEach((k, i) => { absData[k].push(counts[i]); pctData[k].push(pcts[i]); });
     });
 
     const chart = makeChart('chart-repo-composition');
-    chart.setOption({
-      tooltip: {
-        trigger: 'axis', axisPointer: { type: 'shadow' },
-        formatter: params => {
-          let s = `<b>${params[0].axisValue}</b><br/>`;
-          params.forEach(p => { s += `${p.marker}${p.seriesName}：${p.value}%<br/>`; });
-          return s;
+    let compMode = 'pct'; // 'pct' | 'abs'
+
+    function renderComposition() {
+      const isPct = compMode === 'pct';
+      chart.setOption({
+        tooltip: {
+          trigger: 'axis', axisPointer: { type: 'shadow' },
+          formatter: params => {
+            let s = `<b>${params[0].axisValue}</b><br/>`;
+            params.forEach(p => { s += `${p.marker}${p.seriesName}：${p.value}${isPct ? '%' : ' 人'}<br/>`; });
+            return s;
+          },
         },
-      },
-      legend: { data: TYPE_KEYS.map(k => TYPE_LABELS[k]), type: 'scroll', textStyle: { color: t('#aaa','#555') }, pageTextStyle: { color: t('#aaa','#555') }, top: 0 },
-      grid: { left: 10, right: 20, top: 36, bottom: 10, containLabel: true },
-      xAxis: { type: 'value', max: 100, axisLabel: { color: t('#aaa','#666'), formatter: '{value}%' } },
-      yAxis: { type: 'category', data: repoNames, axisLabel: { color: t('#aaa','#666'), fontSize: 11 } },
-      series: TYPE_KEYS.map(k => ({
-        name: TYPE_LABELS[k], type: 'bar', stack: 'total',
-        itemStyle: { color: COLORS[k] },
-        label: { show: false },
-        data: typeData[k],
-      })),
-    });
+        legend: { data: TYPE_KEYS.map(k => TYPE_LABELS[k]), type: 'scroll', textStyle: { color: t('#aaa','#555') }, pageTextStyle: { color: t('#aaa','#555') }, top: 0 },
+        grid: { left: 10, right: 20, top: 36, bottom: 10, containLabel: true },
+        xAxis: { type: 'value', max: isPct ? 100 : undefined, axisLabel: { color: t('#aaa','#666'), formatter: isPct ? '{value}%' : '{value}' } },
+        yAxis: { type: 'category', data: repoNames, axisLabel: { color: t('#aaa','#666'), fontSize: 11 } },
+        series: TYPE_KEYS.map(k => ({
+          name: TYPE_LABELS[k], type: 'bar', stack: 'total',
+          itemStyle: { color: COLORS[k] },
+          label: { show: false },
+          data: isPct ? pctData[k] : absData[k],
+        })),
+      }, true);
+    }
+    renderComposition();
+
+    // 切换按钮逻辑
+    const btnPct = document.getElementById('comp-pct');
+    const btnAbs = document.getElementById('comp-abs');
+    function setCompMode(mode) {
+      compMode = mode;
+      btnPct.style.background = mode === 'pct' ? 'var(--accent)' : 'transparent';
+      btnPct.style.color      = mode === 'pct' ? '#fff' : 'var(--text-2)';
+      btnAbs.style.background = mode === 'abs' ? 'var(--accent)' : 'transparent';
+      btnAbs.style.color      = mode === 'abs' ? '#fff' : 'var(--text-2)';
+      renderComposition();
+    }
+    btnPct.addEventListener('click', () => setCompMode('pct'));
+    btnAbs.addEventListener('click', () => setCompMode('abs'));
+
     window.addEventListener('resize', () => chart.resize());
   }
 

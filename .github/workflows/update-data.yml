@@ -2,7 +2,8 @@ name: Daily Data Update
 
 on:
   schedule:
-    - cron: '0 14 * * *'   # 22:00 CST（UTC+8 = UTC 14:00），每天增量更新
+    - cron: '0 14 * * *'   # 22:00 CST，每天增量更新
+    - cron: '0 14 * * 0'   # 22:00 CST，每周日全量刷新用户画像
   workflow_dispatch:
     inputs:
       full_refresh:
@@ -37,7 +38,8 @@ jobs:
           rm -rf data/stars/
           rm -rf data/mrs/
           rm -rf data/issues/
-          if [ "${{ github.event.inputs.full_refresh }}" = "true" ]; then
+          if [ "${{ github.event.inputs.full_refresh }}" = "true" ] || \
+             [ "${{ github.event.schedule }}" = "0 14 * * 0" ]; then
             echo "全量刷新：清除 user_profiles.json"
             rm -f data/user_profiles.json
           fi
@@ -65,6 +67,9 @@ jobs:
 
       - name: Generate overview timeline
         run: python collector.py overview
+
+      - name: Generate MR summary
+        run: python collector.py mr-summary
 
       - name: Generate weekly activity
         run: python collector.py weekly
