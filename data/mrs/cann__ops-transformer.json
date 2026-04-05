@@ -1,5 +1,21 @@
 [
   {
+    "iid": 3793,
+    "state": "opened",
+    "created_at": "2026-04-05",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "a526214478"
+  },
+  {
+    "iid": 3792,
+    "state": "closed",
+    "created_at": "2026-04-05",
+    "merged_at": "",
+    "closed_at": "2026-04-05",
+    "author": "a526214478"
+  },
+  {
     "iid": 3791,
     "state": "opened",
     "created_at": "2026-04-04",

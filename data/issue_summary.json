@@ -53,8 +53,8 @@
       "name": "ops-transformer",
       "path": "cann/ops-transformer",
       "avg_days": 5.5,
-      "closed": 1507,
-      "opened": 139
+      "closed": 1508,
+      "opened": 138
     },
     {
       "name": "pto-isa",
@@ -131,7 +131,7 @@
       "path": "cann/ops-math",
       "avg_days": 8.7,
       "closed": 1062,
-      "opened": 64
+      "opened": 63
     },
     {
       "name": "ascend-transformer-boost",
@@ -214,8 +214,8 @@
       "name": "pypto",
       "path": "cann/pypto",
       "avg_days": 14.4,
-      "closed": 887,
-      "opened": 185
+      "closed": 892,
+      "opened": 180
     },
     {
       "name": "atvoss",
@@ -288,5 +288,5 @@
       "opened": 3
     }
   ],
-  "generated_at": "2026-04-04"
+  "generated_at": "2026-04-05"
 }

@@ -10,6 +10,15 @@
     ]
   },
   {
+    "user_name": "ldhnet",
+    "nick_name": "lidonghui",
+    "user_id": 854882,
+    "avatar": "https://cdn-img.gitcode.com/fe/bd/46f7e909641b981dfed7ee2243b7825cf841ce6a12519b5633473401dfbb9e0f.png",
+    "starred_repos": [
+      "cann/ops-math"
+    ]
+  },
+  {
     "user_name": "shamolvyeaixingmu",
     "nick_name": "老虎",
     "user_id": 4239652,
@@ -16216,6 +16225,28 @@
     ]
   },
   {
+    "user_name": "gcw_1su06AEO",
+    "nick_name": "gcw_1su06AEO",
+    "user_id": 7811385,
+    "avatar": "",
+    "starred_repos": [
+      "cann/ops-transformer",
+      "cann/community"
+    ]
+  },
+  {
+    "user_name": "a526214478",
+    "nick_name": "Vi1ta",
+    "user_id": 1718042,
+    "avatar": "https://cdn-img.gitcode.com/ec/fc/4ecf0c7847b6f5a3d1d4b2e231cf8716563b41ee159dabcc72c55165b233d64b.png",
+    "starred_repos": [
+      "cann/ops-transformer",
+      "cann/cann-recipes-infer",
+      "cann/catlass",
+      "cann/cann-samples"
+    ]
+  },
+  {
     "user_name": "here8",
     "nick_name": "大女主",
     "user_id": 7109497,
@@ -17383,6 +17414,7 @@
     "starred_repos": [
       "cann/ops-transformer",
       "cann/community",
+      "cann/skills",
       "cann/catlass",
       "cann/cann-learning-hub"
     ]
@@ -20713,6 +20745,15 @@
     ]
   },
   {
+    "user_name": "qq_56418536",
+    "nick_name": "似水恰流年",
+    "user_id": 560464,
+    "avatar": "https://cdn-img.gitcode.com/ca/be/1cab3239ed1c8c0a54ea13a0d49c19bffa62825fce9917f04c4cd456473dc292.jpg",
+    "starred_repos": [
+      "cann/ops-nn"
+    ]
+  },
+  {
     "user_name": "qq_64803382",
     "nick_name": "魑魅魍魉37",
     "user_id": 3526174,
@@ -21609,7 +21650,7 @@
     "user_name": "li-yunle",
     "nick_name": "李允乐",
     "user_id": 7928706,
-    "avatar": "https://cdn-img.gitcode.com/df/dc/0931d53f1710d6c4989adeb8fba4e7446d3f8fe0ed191d519c5a12884477f81a.jpg",
+    "avatar": "https://cdn-img.gitcode.com/ec/ff/ec18560ff64e5fd2121108211aede35e3e90895333f226737b6e19a82bc4bddd.png?time=1775367054943",
     "starred_repos": [
       "cann/ops-nn"
     ]
@@ -24240,17 +24281,6 @@
     "avatar": null,
     "starred_repos": [
       "cann/cann-recipes-infer"
-    ]
-  },
-  {
-    "user_name": "a526214478",
-    "nick_name": "Vi1ta",
-    "user_id": 1718042,
-    "avatar": "https://cdn-img.gitcode.com/ec/fc/4ecf0c7847b6f5a3d1d4b2e231cf8716563b41ee159dabcc72c55165b233d64b.png",
-    "starred_repos": [
-      "cann/cann-recipes-infer",
-      "cann/catlass",
-      "cann/cann-samples"
     ]
   },
   {
@@ -32082,8 +32112,8 @@
     ]
   },
   {
-    "user_name": "hkq2025",
-    "nick_name": "hkq2025",
+    "user_name": "Hu-KQ",
+    "nick_name": "Hu-KQ",
     "user_id": 7809316,
     "avatar": null,
     "starred_repos": [

@@ -110,7 +110,7 @@
     {
       "name": "ops-transformer",
       "path": "cann/ops-transformer",
-      "total": 3791,
+      "total": 3793,
       "data": [
         0,
         0,
@@ -216,13 +216,13 @@
         319,
         354,
         380,
-        326
+        328
       ]
     },
     {
       "name": "ops-nn",
       "path": "cann/ops-nn",
-      "total": 3542,
+      "total": 3543,
       "data": [
         0,
         0,
@@ -328,7 +328,7 @@
         291,
         304,
         286,
-        234
+        235
       ]
     },
     {
@@ -2686,7 +2686,7 @@
     {
       "name": "cann-samples",
       "path": "cann/cann-samples",
-      "total": 144,
+      "total": 145,
       "data": [
         0,
         0,
@@ -2792,13 +2792,13 @@
         35,
         24,
         29,
-        21
+        22
       ]
     },
     {
       "name": "asnumpy",
       "path": "cann/asnumpy",
-      "total": 117,
+      "total": 118,
       "data": [
         0,
         0,
@@ -2904,7 +2904,7 @@
         9,
         3,
         2,
-        2
+        3
       ]
     },
     {
@@ -5484,5 +5484,5 @@
       ]
     }
   ],
-  "generated_at": "2026-04-04"
+  "generated_at": "2026-04-05"
 }

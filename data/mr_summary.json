@@ -4,15 +4,15 @@
       "name": "ops-transformer",
       "path": "cann/ops-transformer",
       "merged": 2477,
-      "open": 224,
-      "total": 2701
+      "open": 225,
+      "total": 2702
     },
     {
       "name": "ops-nn",
       "path": "cann/ops-nn",
       "merged": 2288,
-      "open": 295,
-      "total": 2583
+      "open": 296,
+      "total": 2584
     },
     {
       "name": "pypto",
@@ -165,8 +165,8 @@
       "name": "cann-samples",
       "path": "cann/cann-samples",
       "merged": 96,
-      "open": 18,
-      "total": 114
+      "open": 17,
+      "total": 113
     },
     {
       "name": "asnumpy",
@@ -330,6 +330,6 @@
       "total": 6
     }
   ],
-  "unique_authors": 2028,
-  "generated_at": "2026-04-04"
+  "unique_authors": 2030,
+  "generated_at": "2026-04-05"
 }
