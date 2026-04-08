@@ -1,5 +1,75 @@
 [
   {
+    "iid": 1196,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "closed_at": "",
+    "author": "gcw_YBIAEfqJ"
+  },
+  {
+    "iid": 1195,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "closed_at": "",
+    "author": "zhangdongdong34"
+  },
+  {
+    "iid": 1194,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "closed_at": "",
+    "author": "Coder_Nerd"
+  },
+  {
+    "iid": 1193,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "wang-shilong32"
+  },
+  {
+    "iid": 1192,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "closed_at": "",
+    "author": "StoneChan_"
+  },
+  {
+    "iid": 1191,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "yefeicoding"
+  },
+  {
+    "iid": 1190,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "ly_cann_coder"
+  },
+  {
+    "iid": 1189,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "ren-botao"
+  },
+  {
+    "iid": 1188,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "closed_at": "",
+    "author": "liangtongxue"
+  },
+  {
+    "iid": 1187,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "jialimin1"
+  },
+  {
     "iid": 1186,
     "state": "opened",
     "created_at": "2026-04-07",
@@ -344,9 +414,9 @@
   },
   {
     "iid": 1133,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-03-31",
-    "closed_at": "",
+    "closed_at": "2026-04-08",
     "author": "gcw_pfzw85mp"
   },
   {
@@ -5461,16 +5531,16 @@
   },
   {
     "iid": 373,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2025-12-30",
-    "closed_at": "",
+    "closed_at": "2026-04-08",
     "author": "skywang2"
   },
   {
     "iid": 372,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2025-12-30",
-    "closed_at": "",
+    "closed_at": "2026-04-08",
     "author": "skywang2"
   },
   {

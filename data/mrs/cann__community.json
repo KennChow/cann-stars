@@ -1,5 +1,13 @@
 [
   {
+    "iid": 417,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "Kprime"
+  },
+  {
     "iid": 416,
     "state": "closed",
     "created_at": "2026-04-07",

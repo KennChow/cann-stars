@@ -1,5 +1,29 @@
 [
   {
+    "iid": 55,
+    "state": "merged",
+    "created_at": "2026-04-08",
+    "merged_at": "2026-04-08",
+    "closed_at": "",
+    "author": "ShemuelHe"
+  },
+  {
+    "iid": 54,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "merged_at": "",
+    "closed_at": "2026-04-08",
+    "author": "ShemuelHe"
+  },
+  {
+    "iid": 53,
+    "state": "merged",
+    "created_at": "2026-04-08",
+    "merged_at": "2026-04-08",
+    "closed_at": "",
+    "author": "LZY1021"
+  },
+  {
     "iid": 52,
     "state": "opened",
     "created_at": "2026-04-04",
@@ -17,18 +41,18 @@
   },
   {
     "iid": 50,
-    "state": "opened",
+    "state": "merged",
     "created_at": "2026-03-31",
-    "merged_at": "",
+    "merged_at": "2026-04-08",
     "closed_at": "",
     "author": "LZY1021"
   },
   {
     "iid": 49,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-03-30",
     "merged_at": "",
-    "closed_at": "",
+    "closed_at": "2026-04-08",
     "author": "ShemuelHe"
   },
   {

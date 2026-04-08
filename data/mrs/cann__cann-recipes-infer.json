@@ -1,5 +1,29 @@
 [
   {
+    "iid": 346,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "chenyu10"
+  },
+  {
+    "iid": 345,
+    "state": "merged",
+    "created_at": "2026-04-08",
+    "merged_at": "2026-04-08",
+    "closed_at": "",
+    "author": "tian-ccs"
+  },
+  {
+    "iid": 344,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "tian-ccs"
+  },
+  {
     "iid": 343,
     "state": "opened",
     "created_at": "2026-04-07",
@@ -225,10 +249,10 @@
   },
   {
     "iid": 315,
-    "state": "closed",
+    "state": "opened",
     "created_at": "2026-03-16",
     "merged_at": "",
-    "closed_at": "2026-04-01",
+    "closed_at": "",
     "author": "hiliPP"
   },
   {

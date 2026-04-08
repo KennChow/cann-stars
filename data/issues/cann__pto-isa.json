@@ -1,5 +1,68 @@
 [
   {
+    "iid": 278,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "closed_at": "",
+    "author": "Azizbek"
+  },
+  {
+    "iid": 277,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "closed_at": "",
+    "author": "filipskogh"
+  },
+  {
+    "iid": 276,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "closed_at": "",
+    "author": "Azizbek"
+  },
+  {
+    "iid": 275,
+    "state": "opened",
+    "created_at": "2026-04-08",
+    "closed_at": "",
+    "author": "fzhar"
+  },
+  {
+    "iid": 274,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "Azizbek"
+  },
+  {
+    "iid": 273,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "Azizbek"
+  },
+  {
+    "iid": 272,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "Azizbek"
+  },
+  {
+    "iid": 271,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "Azizbek"
+  },
+  {
+    "iid": 270,
+    "state": "closed",
+    "created_at": "2026-04-08",
+    "closed_at": "2026-04-08",
+    "author": "omarzohir"
+  },
+  {
     "iid": 269,
     "state": "closed",
     "created_at": "2026-04-06",
@@ -15,9 +78,9 @@
   },
   {
     "iid": 267,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-04-06",
-    "closed_at": "",
+    "closed_at": "2026-04-08",
     "author": "Azizbek"
   },
   {
@@ -113,9 +176,9 @@
   },
   {
     "iid": 253,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-04-01",
-    "closed_at": "",
+    "closed_at": "2026-04-08",
     "author": "fzhar"
   },
   {
@@ -253,9 +316,9 @@
   },
   {
     "iid": 233,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-03-24",
-    "closed_at": "",
+    "closed_at": "2026-04-08",
     "author": "zjun0"
   },
   {
@@ -358,9 +421,9 @@
   },
   {
     "iid": 217,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-03-20",
-    "closed_at": "",
+    "closed_at": "2026-04-08",
     "author": "fzhar"
   },
   {
