@@ -1,10 +1,98 @@
 [
   {
-    "iid": 753,
+    "iid": 764,
     "state": "opened",
-    "created_at": "2026-04-14",
+    "created_at": "2026-04-15",
     "merged_at": "",
     "closed_at": "",
+    "author": "omarzohir"
+  },
+  {
+    "iid": 763,
+    "state": "opened",
+    "created_at": "2026-04-15",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "ivanmang"
+  },
+  {
+    "iid": 762,
+    "state": "opened",
+    "created_at": "2026-04-15",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "Azizbek"
+  },
+  {
+    "iid": 761,
+    "state": "merged",
+    "created_at": "2026-04-15",
+    "merged_at": "2026-04-15",
+    "closed_at": "",
+    "author": "ivanmang"
+  },
+  {
+    "iid": 760,
+    "state": "merged",
+    "created_at": "2026-04-15",
+    "merged_at": "2026-04-15",
+    "closed_at": "",
+    "author": "jyc304691735"
+  },
+  {
+    "iid": 759,
+    "state": "opened",
+    "created_at": "2026-04-15",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "ChanKaLok"
+  },
+  {
+    "iid": 758,
+    "state": "merged",
+    "created_at": "2026-04-15",
+    "merged_at": "2026-04-15",
+    "closed_at": "",
+    "author": "ChanKaLok"
+  },
+  {
+    "iid": 757,
+    "state": "opened",
+    "created_at": "2026-04-15",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "songxiujing"
+  },
+  {
+    "iid": 756,
+    "state": "merged",
+    "created_at": "2026-04-15",
+    "merged_at": "2026-04-15",
+    "closed_at": "",
+    "author": "echo_stone"
+  },
+  {
+    "iid": 755,
+    "state": "merged",
+    "created_at": "2026-04-15",
+    "merged_at": "2026-04-15",
+    "closed_at": "",
+    "author": "Azizbek"
+  },
+  {
+    "iid": 754,
+    "state": "merged",
+    "created_at": "2026-04-15",
+    "merged_at": "2026-04-15",
+    "closed_at": "",
+    "author": "SherwinBai"
+  },
+  {
+    "iid": 753,
+    "state": "closed",
+    "created_at": "2026-04-14",
+    "merged_at": "",
+    "closed_at": "2026-04-15",
     "author": "SherwinBai"
   },
   {
@@ -73,9 +161,9 @@
   },
   {
     "iid": 744,
-    "state": "opened",
+    "state": "merged",
     "created_at": "2026-04-14",
-    "merged_at": "",
+    "merged_at": "2026-04-15",
     "closed_at": "",
     "author": "ssreddy"
   },
@@ -193,9 +281,9 @@
   },
   {
     "iid": 729,
-    "state": "opened",
+    "state": "merged",
     "created_at": "2026-04-10",
-    "merged_at": "",
+    "merged_at": "2026-04-15",
     "closed_at": "",
     "author": "Azizbek"
   },
@@ -265,9 +353,9 @@
   },
   {
     "iid": 720,
-    "state": "opened",
+    "state": "merged",
     "created_at": "2026-04-10",
-    "merged_at": "",
+    "merged_at": "2026-04-15",
     "closed_at": "",
     "author": "Azizbek"
   },
@@ -313,9 +401,9 @@
   },
   {
     "iid": 714,
-    "state": "opened",
+    "state": "merged",
     "created_at": "2026-04-09",
-    "merged_at": "",
+    "merged_at": "2026-04-15",
     "closed_at": "",
     "author": "ltr123"
   },
@@ -2112,20 +2200,20 @@
     "author": "nmkihail"
   },
   {
-    "iid": 489,
-    "state": "merged",
-    "created_at": "2026-03-16",
-    "merged_at": "2026-03-16",
-    "closed_at": "",
-    "author": "omarzohir"
-  },
-  {
     "iid": 488,
     "state": "merged",
     "created_at": "2026-03-16",
     "merged_at": "2026-03-16",
     "closed_at": "",
     "author": "jyc304691735"
+  },
+  {
+    "iid": 489,
+    "state": "merged",
+    "created_at": "2026-03-16",
+    "merged_at": "2026-03-16",
+    "closed_at": "",
+    "author": "omarzohir"
   },
   {
     "iid": 487,

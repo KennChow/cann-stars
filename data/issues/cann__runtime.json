@@ -1,5 +1,26 @@
 [
   {
+    "iid": 369,
+    "state": "opened",
+    "created_at": "2026-04-15",
+    "closed_at": "",
+    "author": "Guanam2020"
+  },
+  {
+    "iid": 368,
+    "state": "closed",
+    "created_at": "2026-04-15",
+    "closed_at": "2026-04-15",
+    "author": "LiWei79"
+  },
+  {
+    "iid": 367,
+    "state": "opened",
+    "created_at": "2026-04-15",
+    "closed_at": "",
+    "author": "ayang123789"
+  },
+  {
     "iid": 366,
     "state": "opened",
     "created_at": "2026-04-14",
@@ -8,9 +29,9 @@
   },
   {
     "iid": 365,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-04-14",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "LiWei79"
   },
   {
@@ -204,9 +225,9 @@
   },
   {
     "iid": 337,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-04-07",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "gcw_RywTBohB"
   },
   {
@@ -358,9 +379,9 @@
   },
   {
     "iid": 314,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-03-30",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "s003576sgd"
   },
   {

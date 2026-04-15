@@ -1,5 +1,26 @@
 [
   {
+    "iid": 1264,
+    "state": "opened",
+    "created_at": "2026-04-15",
+    "closed_at": "",
+    "author": "wang-shilong32"
+  },
+  {
+    "iid": 1263,
+    "state": "opened",
+    "created_at": "2026-04-15",
+    "closed_at": "",
+    "author": "nunnons2"
+  },
+  {
+    "iid": 1262,
+    "state": "closed",
+    "created_at": "2026-04-15",
+    "closed_at": "2026-04-15",
+    "author": "gitee-yanglulu"
+  },
+  {
     "iid": 1261,
     "state": "opened",
     "created_at": "2026-04-14",
@@ -99,9 +120,9 @@
   },
   {
     "iid": 1247,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-04-14",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "Coder_Nerd"
   },
   {
@@ -295,9 +316,9 @@
   },
   {
     "iid": 1219,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-04-13",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "cai-chengchao"
   },
   {
@@ -925,9 +946,9 @@
   },
   {
     "iid": 1122,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-03-30",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "StoneChan_"
   },
   {
@@ -5335,9 +5356,9 @@
   },
   {
     "iid": 465,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-01-14",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "zhou-qilong"
   },
   {

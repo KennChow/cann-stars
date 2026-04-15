@@ -15,16 +15,16 @@
   },
   {
     "iid": 276,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-04-13",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "see55"
   },
   {
     "iid": 275,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-04-13",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "see55"
   },
   {
@@ -64,9 +64,9 @@
   },
   {
     "iid": 269,
-    "state": "opened",
+    "state": "closed",
     "created_at": "2026-04-07",
-    "closed_at": "",
+    "closed_at": "2026-04-15",
     "author": "ninihihi"
   },
   {

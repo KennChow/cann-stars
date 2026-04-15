@@ -1,5 +1,13 @@
 [
   {
+    "iid": 71,
+    "state": "opened",
+    "created_at": "2026-04-15",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "annqr"
+  },
+  {
     "iid": 70,
     "state": "opened",
     "created_at": "2026-04-10",
@@ -9,9 +17,9 @@
   },
   {
     "iid": 69,
-    "state": "opened",
+    "state": "merged",
     "created_at": "2026-04-09",
-    "merged_at": "",
+    "merged_at": "2026-04-15",
     "closed_at": "",
     "author": "fujun19"
   },
@@ -41,9 +49,9 @@
   },
   {
     "iid": 65,
-    "state": "opened",
+    "state": "merged",
     "created_at": "2026-03-31",
-    "merged_at": "",
+    "merged_at": "2026-04-15",
     "closed_at": "",
     "author": "fujun19"
   },
