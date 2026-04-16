@@ -125,11 +125,9 @@
     .user-table td { padding: 8px 12px; border-bottom: 1px solid var(--row-border); vertical-align: middle; color: var(--text); }
     .user-table tr:hover td { background: var(--hover-bg); }
     .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
-    .badge-contributor     { background: #5b8def22; color: #5b8def; border: 1px solid #5b8def44; }
-    .badge-questioner      { background: #e05f5f22; color: #e05f5f; border: 1px solid #e05f5f44; }
-    .badge-developer       { background: #9370db22; color: #9370db; border: 1px solid #9370db44; }
-    .badge-star_enthusiast { background: #4ecdc422; color: #4ecdc4; border: 1px solid #4ecdc444; }
-    .badge-die_hard_fan    { background: #f5a62322; color: #f5a623; border: 1px solid #f5a62344; }
+    .badge-d0 { background: #4ecdc422; color: #4ecdc4; border: 1px solid #4ecdc444; }
+    .badge-d1 { background: #f5a62322; color: #f5a623; border: 1px solid #f5a62344; }
+    .badge-d2 { background: #5b8def22; color: #5b8def; border: 1px solid #5b8def44; }
     .user-link { color: var(--accent); text-decoration: none; }
     .user-link:hover { text-decoration: underline; }
     .pagination { display: flex; gap: 6px; align-items: center; margin-top: 14px; }
@@ -210,14 +208,14 @@
       <div class="chart" id="chart-repos"></div>
     </div>
     <div class="chart-box">
-      <h2>Star 用户类型分布（全组织）</h2>
+      <h2>D0 / D1 / D2 用户分层（全组织）</h2>
       <div class="chart-legend-row">
         <div class="chart" id="chart-user-type" style="flex:1;min-width:0;height:320px"></div>
         <div id="type-legend" class="legend-panel"></div>
       </div>
     </div>
     <div class="chart-box">
-      <h2>各仓库非开发者占比 Top 20 <span style="font-size:11px;font-weight:400;color:#555;margin-left:6px">仅含 Star ≥ 100 的仓库</span></h2>
+      <h2>各仓库 D0 关注者占比 <span style="font-size:11px;font-weight:400;color:#555;margin-left:6px">仅统计当前三仓的可观测用户</span></h2>
       <div class="chart" id="chart-ghost-rate"></div>
     </div>
     <div class="chart-box chart-wide">
@@ -225,7 +223,7 @@
       <div class="chart" id="chart-org-timeline" style="height:380px"></div>
     </div>
     <div class="chart-box chart-wide">
-      <h2 style="display:flex;align-items:center;flex-wrap:wrap;gap:8px">各仓库用户类型构成 Top 20
+      <h2 style="display:flex;align-items:center;flex-wrap:wrap;gap:8px">各仓库 D0 / D1 / D2 构成
         <span style="font-size:11px;font-weight:400;color:#555">按 Star 数排序</span>
         <span style="margin-left:auto;display:inline-flex;border:1px solid var(--border-3);border-radius:16px;overflow:hidden;font-size:12px;font-weight:400">
           <button id="comp-pct" style="padding:3px 12px;cursor:pointer;border:none;background:var(--accent);color:#fff;transition:all .2s">百分比</button>
@@ -264,14 +262,14 @@
       <div class="goal-list" id="repo-goals"></div>
     </div>
     <div class="chart-box" style="margin-bottom:20px">
-      <h2>用户类型分布</h2>
+      <h2>D0 / D1 / D2 用户分布</h2>
       <div class="chart-legend-row">
         <div class="chart" id="chart-repo-type" style="flex:1;min-width:0;height:320px"></div>
         <div id="repo-type-legend" class="legend-panel"></div>
       </div>
     </div>
     <div class="chart-box" style="margin-bottom:20px">
-      <h2>各类用户 Star 时间趋势</h2>
+      <h2>D0 / D1 / D2 用户 Star 时间趋势</h2>
       <div class="chart" id="chart-repo-type-timeline" style="height:380px"></div>
     </div>
     <div class="chart-box" style="margin-bottom:20px">
@@ -307,11 +305,9 @@
         <h2 id="user-list-title">Star 用户列表</h2>
         <div class="filter-btns" id="filter-btns">
           <button class="filter-btn active" data-type="all">全部</button>
-          <button class="filter-btn" data-type="contributor">贡献者</button>
-          <button class="filter-btn" data-type="questioner">提问者</button>
-          <button class="filter-btn" data-type="developer">开发者</button>
-          <button class="filter-btn" data-type="star_enthusiast">Star 爱好者</button>
-          <button class="filter-btn" data-type="die_hard_fan">铁粉</button>
+          <button class="filter-btn" data-type="d0">D0 关注者</button>
+          <button class="filter-btn" data-type="d1">D1 贡献者</button>
+          <button class="filter-btn" data-type="d2">D2 PR贡献者</button>
         </div>
       </div>
       <div class="table-wrapper">
@@ -340,21 +336,17 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 <script>
 const COLORS = {
-  contributor:    '#5b8def',
-  questioner:     '#e05f5f',
-  developer:      '#9370db',
-  star_enthusiast:'#4ecdc4',
-  die_hard_fan:   '#f5a623',
+  d0: '#4ecdc4',
+  d1: '#f5a623',
+  d2: '#5b8def',
   star: '#f5c842',
   fork: '#4ecdc4',
   issue: '#e05f5f',
 };
 const TYPE_LABELS = {
-  contributor:    '贡献者',
-  questioner:     '提问者',
-  developer:      '开发者',
-  star_enthusiast:'Star 爱好者',
-  die_hard_fan:   '铁粉',
+  d0: 'D0 关注者',
+  d1: 'D1 贡献者',
+  d2: 'D2 PR贡献者',
 };
 
 const DATA_VER = '?v=18';
@@ -418,31 +410,18 @@ document.querySelectorAll('.tab').forEach(tab => {
 let repoTypeChart, repoTypeTimelineChart;
 
 async function main() {
-  const [repos, usersSlim, orgTimeline, weeklyData, mrSummary, issueSummary] = await Promise.all([
+  const [repos, dlevelSummary, weeklyData, mrSummary, issueSummary] = await Promise.all([
     loadJSON('data/repos.json'),
-    loadJSON('data/users_slim.json'),
-    loadJSON('data/org_timeline.json'),
+    loadJSON('data/dlevel_summary.json'),
     loadJSON('data/weekly_activity.json').catch(() => null),
     loadJSON('data/mr_summary.json').catch(() => null),
     loadJSON('data/issue_summary.json').catch(() => null),
   ]);
 
-  // users_slim 同时承担 allUsers 和 profiles 两个角色
-  const allUsers = usersSlim;
-  const profiles = usersSlim.filter(u => u.user_type);
-
-  // 建立 user_name → profile 映射
-  const profileMap = {};
-  usersSlim.forEach(u => { if (u.user_type) profileMap[u.user_name] = u; });
-
-  // 建立 repo path → star 用户列表映射
-  const repoUserMap = {};
-  usersSlim.forEach(u => {
-    u.starred_repos.forEach(rpath => {
-      if (!repoUserMap[rpath]) repoUserMap[rpath] = [];
-      repoUserMap[rpath].push(u);
-    });
-  });
+  const orgTimeline = dlevelSummary.star_timeline || [];
+  const repoUserMap = dlevelSummary.repo_users || {};
+  const repoCounts = dlevelSummary.repo_counts || {};
+  const globalCounts = dlevelSummary.global_counts || { d0: 0, d1: 0, d2: 0, total: 0 };
 
   // ════════════════════════════════════════════════════════
   // 概览面板
@@ -450,16 +429,16 @@ async function main() {
   const totalStars  = repos.reduce((s, r) => s + r.star_count, 0);
   const totalForks  = repos.reduce((s, r) => s + r.forks_count, 0);
   const totalIssues = repos.reduce((s, r) => s + r.open_issues_count, 0);
-  const typeCounts  = { contributor: 0, questioner: 0, developer: 0, star_enthusiast: 0, die_hard_fan: 0 };
-  profiles.forEach(p => { typeCounts[p.user_type] = (typeCounts[p.user_type] || 0) + 1; });
+  const typeCounts  = { d0: globalCounts.d0 || 0, d1: globalCounts.d1 || 0, d2: globalCounts.d2 || 0 };
 
   document.getElementById('stats-row').innerHTML = [
-    ['仓库总数',       repos.length, ''],
-    ['总 Star 数',     totalStars.toLocaleString(), ''],
-    ['总 Fork 数',     totalForks.toLocaleString(), ''],
-    ['开放 Issue',     totalIssues.toLocaleString(), ''],
-    ['唯一 Star 用户', allUsers.length.toLocaleString(), ''],
-    ['MR 提交者',      (mrSummary?.unique_authors ?? '–').toLocaleString(), ''],
+    ['仓库总数', repos.length, ''],
+    ['总 Star 数', totalStars.toLocaleString(), ''],
+    ['总 Fork 数', totalForks.toLocaleString(), ''],
+    ['开放 Issue', totalIssues.toLocaleString(), ''],
+    ['D0 关注者', (globalCounts.d0 ?? 0).toLocaleString(), ''],
+    ['D1 贡献者', (globalCounts.d1 ?? 0).toLocaleString(), ''],
+    ['D2 PR贡献者', (globalCounts.d2 ?? 0).toLocaleString(), ''],
   ].map(([lbl, val, sub]) =>
     `<div class="stat-card"><div class="val">${val}<small style="font-size:14px;color:#666">${sub}</small></div><div class="lbl">${lbl}</div></div>`
   ).join('');
@@ -488,99 +467,61 @@ async function main() {
     window.addEventListener('resize', () => chart.resize());
   }
 
-  // 图2：用户类型双环饼图
+  // 图2：D0/D1/D2 分层图
   {
-    const devTotal = typeCounts.contributor + typeCounts.questioner + typeCounts.developer;
-    const nonDev   = typeCounts.star_enthusiast + typeCounts.die_hard_fan;
     const chart = makeChart('chart-user-type');
     chart.setOption({
       tooltip: { trigger: 'item', formatter: '{b}: {c} 位 ({d}%)' },
       legend: { show: false },
-      series: [
-        // 内环：开发者 vs 非开发者
-        {
-          type: 'pie', radius: ['30%', '50%'], center: ['50%', '50%'],
-          label: { show: true, position: 'inside', color: t('#fff','#222'), fontSize: 12, fontWeight: 600,
-            formatter: p => `${p.name}\n${p.percent.toFixed(1)}%` },
-          labelLine: { show: false },
-          data: [
-            { name: '开发者',   value: devTotal, itemStyle: { color: '#4a7fd4' } },
-            { name: '非开发者', value: nonDev,   itemStyle: { color: '#d4874a' } },
-          ],
-        },
-        // 外环：五类细分
-        {
-          type: 'pie', radius: ['52%', '70%'], center: ['50%', '50%'],
-          label: { show: true, position: 'outside', color: t('#ccc','#444'), fontSize: 11,
-            formatter: p => `${p.name}\n${p.percent.toFixed(1)}%` },
-          labelLine: { length: 8, length2: 6 },
-          data: [
-            { name: '贡献者（提交 MR）',     value: typeCounts.contributor,    itemStyle: { color: COLORS.contributor } },
-            { name: '提问者（仅 Issue）',     value: typeCounts.questioner,     itemStyle: { color: COLORS.questioner } },
-            { name: '开发者（无 CANN 活动）', value: typeCounts.developer,      itemStyle: { color: COLORS.developer } },
-            { name: 'Star 爱好者（多仓）',    value: typeCounts.star_enthusiast,itemStyle: { color: COLORS.star_enthusiast } },
-            { name: '铁粉（单仓）',           value: typeCounts.die_hard_fan,   itemStyle: { color: COLORS.die_hard_fan } },
-          ],
-        },
-      ],
+      series: [{
+        type: 'pie', radius: ['35%', '68%'], center: ['50%', '50%'],
+        label: { show: true, position: 'outside', color: t('#ccc','#444'), fontSize: 11, formatter: p => `${p.name}\n${p.percent.toFixed(1)}%` },
+        data: [
+          { name: TYPE_LABELS.d0, value: typeCounts.d0, itemStyle: { color: COLORS.d0 } },
+          { name: TYPE_LABELS.d1, value: typeCounts.d1, itemStyle: { color: COLORS.d1 } },
+          { name: TYPE_LABELS.d2, value: typeCounts.d2, itemStyle: { color: COLORS.d2 } },
+        ],
+      }],
     });
     window.addEventListener('resize', () => chart.resize());
 
-    // 类型说明卡片
-    const total = profiles.length;
+    const total = globalCounts.total || 1;
     document.getElementById('type-legend').innerHTML = `
-      <div style="margin-bottom:14px;color:#aaa;font-weight:600;font-size:13px">用户类型说明</div>
+      <div style="margin-bottom:14px;color:#aaa;font-weight:600;font-size:13px">D0 / D1 / D2 标签说明</div>
       ${[
-        { color:'#4a7fd4', label:'开发者', n: devTotal, desc:'在 GitCode 有贡献活动，细分：' },
-        { color:COLORS.contributor,    label:'↳ 贡献者',     n: typeCounts.contributor,
-          desc:'在 CANN 仓库提交过 <b>MR/PR</b>' },
-        { color:COLORS.questioner,     label:'↳ 提问者',     n: typeCounts.questioner,
-          desc:'在 CANN 仓库提过 <b>Issue</b>，无 MR' },
-        { color:COLORS.developer,      label:'↳ 开发者',     n: typeCounts.developer,
-          desc:'有贡献活动，但无 CANN 特定 MR/Issue' },
-        { color:'#d4874a', label:'非开发者', n: nonDev, desc:'无贡献活动，细分：' },
-        { color:COLORS.star_enthusiast,label:'↳ Star 爱好者',n: typeCounts.star_enthusiast,
-          desc:'Star 了 <b>多个</b> CANN 仓库' },
-        { color:COLORS.die_hard_fan,   label:'↳ 铁粉',       n: typeCounts.die_hard_fan,
-          desc:'只 Star 了 <b>某一个</b> CANN 仓库' },
-      ].map(t => `
+        { key:'d0', desc:'D0 关注者：Star / Watch / Fork 仓库，浏览 / 访问 / 下载资源' },
+        { key:'d1', desc:'D1 贡献者：提交 Issue / 评论 issue / 提交 PR / 在社区论坛参与讨论 / 参与社区活动' },
+        { key:'d2', desc:'D2 PR贡献者：至少合入了 1 个 PR' },
+      ].map(item => `
         <div style="margin-bottom:10px">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
-            <span style="width:9px;height:9px;border-radius:50%;background:${t.color};flex-shrink:0"></span>
-            <span style="color:var(--text);font-weight:500">${t.label}</span>
-            ${t.n !== undefined ? `<span style="color:var(--text-4);margin-left:auto">${t.n.toLocaleString()} (${(t.n/total*100).toFixed(1)}%)</span>` : ''}
+            <span style="width:9px;height:9px;border-radius:50%;background:${COLORS[item.key]};flex-shrink:0"></span>
+            <span style="color:var(--text);font-weight:500">${TYPE_LABELS[item.key]}</span>
+            <span style="color:var(--text-4);margin-left:auto">${(typeCounts[item.key] || 0).toLocaleString()} (${(((typeCounts[item.key] || 0) / total) * 100).toFixed(1)}%)</span>
           </div>
-          <div style="color:var(--text-3);padding-left:15px">${t.desc}</div>
+          <div style="color:var(--text-3);padding-left:15px">${item.desc}</div>
         </div>
       `).join('')}
     `;
   }
 
-  // 图3：各仓库非开发者占比
+  // 图3：各仓库 D0 占比
   {
-    const rows = repos
-      .filter(r => r.star_count >= 100)
-      .map(r => {
-        const users    = repoUserMap[r.path] || [];
-        const profiled = users.filter(u => profileMap[u.user_name]);
-        const DEV_TYPES = new Set(['contributor', 'questioner', 'developer']);
-        const nonDev   = profiled.filter(u => !DEV_TYPES.has(profileMap[u.user_name]?.user_type));
-        const rate = profiled.length > 0 ? nonDev.length / profiled.length * 100 : 0;
-        return { name: r.path.split('/')[1], rate, profiled: profiled.length };
-      })
-      .filter(r => r.profiled >= 5)
-      .sort((a, b) => b.rate - a.rate)
-      .slice(0, 20);
+    const rows = repos.map(r => {
+      const counts = repoCounts[r.path] || { d0: 0, total: 0 };
+      const rate = counts.total > 0 ? counts.d0 / counts.total * 100 : 0;
+      return { name: r.path.split('/')[1], rate, total: counts.total };
+    }).filter(r => r.total > 0);
 
     const chart = makeChart('chart-ghost-rate');
     chart.setOption({
-      tooltip: { trigger: 'axis', formatter: p => `${p[0].name}<br/>非开发者: ${p[0].value.toFixed(1)}%` },
+      tooltip: { trigger: 'axis', formatter: p => `${p[0].name}<br/>D0 占比: ${p[0].value.toFixed(1)}%` },
       grid: { left: 10, right: 20, bottom: 80, containLabel: true },
       xAxis: { type: 'category', data: rows.map(r => r.name), axisLabel: { rotate: 40, color: t('#aaa','#666'), fontSize: 11 } },
-      yAxis: { type: 'value', axisLabel: { color: t('#aaa','#666'), formatter: '{value}%' }, max: 60 },
+      yAxis: { type: 'value', axisLabel: { color: t('#aaa','#666'), formatter: '{value}%' }, max: 100 },
       series: [{
         type: 'bar',
-        data: rows.map(r => ({ value: r.rate, itemStyle: { color: r.rate > 30 ? '#e05f5f' : r.rate > 15 ? '#e0a85f' : '#5b8def' } })),
+        data: rows.map(r => ({ value: r.rate, itemStyle: { color: r.rate > 60 ? COLORS.d0 : r.rate > 30 ? COLORS.d1 : COLORS.d2 } })),
       }],
     });
     window.addEventListener('resize', () => chart.resize());
@@ -667,7 +608,7 @@ async function main() {
   // 图6：全组织 Star 增长趋势
   {
     const months = orgTimeline.map(d => d.month);
-    const TYPE_KEYS = ['contributor', 'questioner', 'developer', 'star_enthusiast', 'die_hard_fan'];
+    const TYPE_KEYS = ['d0', 'd1', 'd2'];
     const chart = makeChart('chart-org-timeline');
     chart.setOption({
       tooltip: {
@@ -707,23 +648,18 @@ async function main() {
     window.addEventListener('resize', () => chart.resize());
   }
 
-  // 图7：各仓库用户类型构成（Top 20，百分比/绝对值切换）
+  // 图7：各仓库 D0/D1/D2 构成（百分比/绝对值切换）
   {
-    const DEV_TYPES = new Set(['contributor', 'questioner', 'developer']);
-    const TYPE_KEYS = ['contributor', 'questioner', 'developer', 'star_enthusiast', 'die_hard_fan'];
     const top20 = repos.filter(r => r.star_count > 0).slice(0, 20).reverse();
     const repoNames = top20.map(r => r.path.split('/')[1]);
+    const TYPE_KEYS = ['d0', 'd1', 'd2'];
 
-    // 计算各仓库各类型的绝对值和百分比
     const absData = {}, pctData = {};
     TYPE_KEYS.forEach(k => { absData[k] = []; pctData[k] = []; });
     top20.forEach(r => {
-      const users    = repoUserMap[r.path] || [];
-      const profiled = users.filter(u => profileMap[u.user_name]);
-      const rawSum   = profiled.length || 1;
-      const counts = TYPE_KEYS.map(k =>
-        profiled.filter(u => profileMap[u.user_name]?.user_type === k).length
-      );
+      const countsObj = repoCounts[r.path] || { d0: 0, d1: 0, d2: 0, total: 0 };
+      const rawSum = countsObj.total || 1;
+      const counts = TYPE_KEYS.map(k => countsObj[k] || 0);
       let pcts = counts.map(c => Math.round(c / rawSum * 1000) / 10);
       const diff = +(100 - pcts.reduce((a, b) => a + b, 0)).toFixed(1);
       const maxIdx = pcts.indexOf(Math.max(...pcts));
@@ -858,8 +794,7 @@ async function main() {
   } // end renderOverviewCharts
   renderOverviewCharts();
 
-  document.getElementById('note').textContent =
-    `用户画像已采集 ${profiles.length} / ${allUsers.length} 位。`;
+  document.getElementById('note').textContent = `已按 D0 / D1 / D2 归类 ${globalCounts.total || 0} 位可观测用户。`;
 
   // ════════════════════════════════════════════════════════
   // 仓库详情面板
@@ -929,11 +864,10 @@ async function main() {
     await loadRepoStarTimes(repoPath);
     const timeMap = starTimeMap[repoPath] || {};
 
-    // 该仓库的用户（含 profile）
+    // 该仓库的用户（已在 dlevel_summary 中完成 D0/D1/D2 归类）
     const repoUsers = (repoUserMap[repoPath] || []).map(u => ({
       ...u,
-      profile: profileMap[u.user_name] || null,
-      star_time: timeMap[u.user_name] || null,
+      star_time: u.star_time || timeMap[u.user_name] || null,
     })).sort((a, b) => (b.star_time || '') < (a.star_time || '') ? -1 : 1);
 
     currentRepoUsers = repoUsers;
@@ -967,80 +901,57 @@ async function main() {
       `;
     }).join('') || '<div style="color:var(--text-3);font-size:12px">未配置运营目标</div>';
 
-    // 类型分布饼图
-    const tc = { contributor: 0, questioner: 0, developer: 0, star_enthusiast: 0, die_hard_fan: 0 };
+    // D0/D1/D2 分布饼图
+    const tc = { d0: 0, d1: 0, d2: 0 };
     repoUsers.forEach(u => {
-      const t = u.profile?.user_type || 'die_hard_fan';
+      const t = u.level || 'd0';
       tc[t] = (tc[t] || 0) + 1;
     });
-    const repoDevTotal = tc.contributor + tc.questioner + tc.developer;
-    const nonDevRepo   = tc.star_enthusiast + tc.die_hard_fan;
     if (!repoTypeChart) repoTypeChart = makeChart('chart-repo-type');
     repoTypeChart.setOption({
       tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
       legend: { show: false },
-      series: [
-        // 内环：开发者 vs 非开发者
-        {
-          type: 'pie', radius: ['28%', '48%'], center: ['50%', '50%'],
-          label: { show: true, position: 'inside', color: t('#fff','#222'), fontSize: 11, fontWeight: 600,
-            formatter: p => `${p.name}\n${p.percent.toFixed(1)}%` },
-          labelLine: { show: false },
-          data: [
-            { name: '开发者',   value: repoDevTotal, itemStyle: { color: '#4a7fd4' } },
-            { name: '非开发者', value: nonDevRepo,   itemStyle: { color: '#d4874a' } },
-          ],
-        },
-        // 外环：五类细分
-        {
-          type: 'pie', radius: ['50%', '68%'], center: ['50%', '50%'],
-          label: { show: true, position: 'outside', color: t('#ccc','#444'), fontSize: 11,
-            formatter: p => `${p.name}\n${p.percent.toFixed(1)}%` },
-          labelLine: { length: 8, length2: 6 },
-          data: [
-            { name: '贡献者（MR）',          value: tc.contributor,    itemStyle: { color: COLORS.contributor } },
-            { name: '提问者（Issue）',        value: tc.questioner,     itemStyle: { color: COLORS.questioner } },
-            { name: '开发者（无CANN活动）',   value: tc.developer,      itemStyle: { color: COLORS.developer } },
-            { name: 'Star 爱好者（多仓）',    value: tc.star_enthusiast,itemStyle: { color: COLORS.star_enthusiast } },
-            { name: '铁粉（单仓）',           value: tc.die_hard_fan,   itemStyle: { color: COLORS.die_hard_fan } },
-          ],
-        },
-      ],
+      series: [{
+        type: 'pie', radius: ['35%', '68%'], center: ['50%', '50%'],
+        label: { show: true, position: 'outside', color: t('#ccc','#444'), fontSize: 11,
+          formatter: p => `${p.name}\n${p.percent.toFixed(1)}%` },
+        labelLine: { length: 8, length2: 6 },
+        data: [
+          { name: TYPE_LABELS.d0, value: tc.d0, itemStyle: { color: COLORS.d0 } },
+          { name: TYPE_LABELS.d1, value: tc.d1, itemStyle: { color: COLORS.d1 } },
+          { name: TYPE_LABELS.d2, value: tc.d2, itemStyle: { color: COLORS.d2 } },
+        ],
+      }],
     });
 
-    // 仓库用户类型说明
     {
-      const totalRepo = repoUsers.length;
+      const totalRepo = repoUsers.length || 1;
       document.getElementById('repo-type-legend').innerHTML = `
-        <div style="margin-bottom:10px;color:#aaa;font-weight:600;font-size:13px">分类标准</div>
+        <div style="margin-bottom:10px;color:#aaa;font-weight:600;font-size:13px">D0 / D1 / D2 标签说明</div>
         ${[
-          { color:'#4a7fd4',              label:'开发者',       n: repoDevTotal,        desc:'有 GitCode 贡献活动，细分：' },
-          { color:COLORS.contributor,     label:'↳ 贡献者',     n: tc.contributor,      desc:'在 CANN 提交过 <b>MR/PR</b>' },
-          { color:COLORS.questioner,      label:'↳ 提问者',     n: tc.questioner,       desc:'在 CANN 提过 <b>Issue</b>，无 MR' },
-          { color:COLORS.developer,       label:'↳ 开发者',     n: tc.developer,        desc:'有贡献，无 CANN MR/Issue' },
-          { color:'#d4874a',              label:'非开发者',     n: nonDevRepo,          desc:'无贡献活动，细分：' },
-          { color:COLORS.star_enthusiast, label:'↳ Star 爱好者',n: tc.star_enthusiast,  desc:'Star 了<b>多个</b> CANN 仓库' },
-          { color:COLORS.die_hard_fan,    label:'↳ 铁粉',       n: tc.die_hard_fan,     desc:'只 Star 了<b>某一个</b> CANN 仓库' },
-        ].map(t => `
+          { key:'d0', desc:'D0 关注者：Star / Watch / Fork 仓库，浏览 / 访问 / 下载资源（当前仓库页可完整统计 Star / Fork）' },
+          { key:'d1', desc:'D1 贡献者：提交 Issue / 评论 issue / 提交 PR / 在社区论坛参与讨论 / 参与社区活动（当前仓库页可统计 Issue / PR 提交）' },
+          { key:'d2', desc:'D2 PR贡献者：至少合入了 1 个 PR（Pull Request）' },
+        ].map(item => `
           <div style="margin-bottom:8px">
             <div style="display:flex;align-items:center;gap:5px;margin-bottom:1px">
-              <span style="width:8px;height:8px;border-radius:50%;background:${t.color};flex-shrink:0"></span>
-              <span style="color:var(--text);font-weight:500">${t.label}</span>
-              <span style="color:var(--text-4);margin-left:auto;font-size:11px">${t.n} (${totalRepo > 0 ? (t.n/totalRepo*100).toFixed(0) : 0}%)</span>
+              <span style="width:8px;height:8px;border-radius:50%;background:${COLORS[item.key]};flex-shrink:0"></span>
+              <span style="color:var(--text);font-weight:500">${TYPE_LABELS[item.key]}</span>
+              <span style="color:var(--text-4);margin-left:auto;font-size:11px">${tc[item.key]} (${(tc[item.key] / totalRepo * 100).toFixed(0)}%)</span>
             </div>
-            <div style="color:var(--text-4);padding-left:13px;font-size:11px">${t.desc}</div>
+            <div style="color:var(--text-4);padding-left:13px;font-size:11px">${item.desc}</div>
           </div>
         `).join('')}
       `;
     }
 
     // 各类用户按月 star 堆叠 + 累计折线
-    const typeMonthMap = { contributor: {}, questioner: {}, developer: {}, star_enthusiast: {}, die_hard_fan: {} };
+    const typeMonthMap = { d0: {}, d1: {}, d2: {} };
     const monthTotalMap = {};
     repoUsers.forEach(u => {
       if (!u.star_time) return;
       const ym    = u.star_time.slice(0, 7);
-      const utype = u.profile?.user_type || 'die_hard_fan';
+      const utype = u.level || 'd0';
       typeMonthMap[utype][ym] = (typeMonthMap[utype][ym] || 0) + 1;
       monthTotalMap[ym] = (monthTotalMap[ym] || 0) + 1;
     });
@@ -1129,8 +1040,8 @@ async function main() {
         xAxis: { type: 'category', data: iMonths, axisLabel: { rotate: 40, color: t('#aaa','#666'), fontSize: 10 } },
         yAxis: { type: 'value', axisLabel: { color: t('#aaa','#666') } },
         series: [
-          { name: '新建', type: 'bar', itemStyle: { color: COLORS.questioner }, data: iMonths.map(m => createMap[m]||0) },
-          { name: '关闭', type: 'bar', itemStyle: { color: COLORS.contributor }, data: iMonths.map(m => closeMap[m]||0)  },
+          { name: '新建', type: 'bar', itemStyle: { color: COLORS.d1 }, data: iMonths.map(m => createMap[m]||0) },
+          { name: '关闭', type: 'bar', itemStyle: { color: COLORS.d2 }, data: iMonths.map(m => closeMap[m]||0)  },
         ],
       });
       window.addEventListener('resize', () => issueChart1.resize());
@@ -1210,8 +1121,8 @@ async function main() {
         xAxis: { type: 'category', data: mMonths, axisLabel: { rotate: 40, color: t('#aaa','#666'), fontSize: 10 } },
         yAxis: { type: 'value', axisLabel: { color: t('#aaa','#666') } },
         series: [
-          { name: '新建',  type: 'bar', itemStyle: { color: COLORS.developer },    data: mMonths.map(m => mrCreateMap[m]||0) },
-          { name: '已合并',type: 'bar', itemStyle: { color: COLORS.contributor }, data: mMonths.map(m => mrMergeMap[m]||0)  },
+          { name: '新建',  type: 'bar', itemStyle: { color: COLORS.d1 },    data: mMonths.map(m => mrCreateMap[m]||0) },
+          { name: '已合并',type: 'bar', itemStyle: { color: COLORS.d2 }, data: mMonths.map(m => mrMergeMap[m]||0)  },
         ],
       });
       window.addEventListener('resize', () => mrChart1.resize());
@@ -1225,9 +1136,9 @@ async function main() {
           type: 'pie', radius: ['38%', '62%'], center: ['50%', '44%'],
           label: { color: t('#ccc','#444') },
           data: [
-            { name: '已合并', value: merged.length,    itemStyle: { color: COLORS.contributor } },
-            { name: '开放中', value: opened,            itemStyle: { color: COLORS.developer } },
-            { name: '已关闭', value: closedNoMerge,     itemStyle: { color: COLORS.questioner } },
+            { name: '已合并', value: merged.length,    itemStyle: { color: COLORS.d2 } },
+            { name: '开放中', value: opened,            itemStyle: { color: COLORS.d1 } },
+            { name: '已关闭', value: closedNoMerge,     itemStyle: { color: COLORS.issue } },
           ],
         }],
       });
@@ -1243,10 +1154,10 @@ async function main() {
 
   function renderUserTable() {
     console.log('filter:', currentFilter, 'total users:', currentRepoUsers.length,
-      'sample type:', currentRepoUsers[0]?.profile?.user_type);
+      'sample type:', currentRepoUsers[0]?.level);
     const filtered = currentFilter === 'all'
       ? currentRepoUsers
-      : currentRepoUsers.filter(u => (u.profile?.user_type || 'die_hard_fan') === currentFilter);
+      : currentRepoUsers.filter(u => (u.level || 'd0') === currentFilter);
 
     const total = filtered.length;
     const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -1254,12 +1165,12 @@ async function main() {
     const page  = filtered.slice(start, start + PAGE_SIZE);
 
     document.getElementById('user-list-title').textContent =
-      `Star 用户列表（${total} 位${currentFilter !== 'all' ? ' · 已筛选' : ''}）`;
+      `仓库用户列表（${total} 位${currentFilter !== 'all' ? ' · 已筛选' : ''}）`;
 
     const tbody = document.getElementById('user-tbody');
     tbody.innerHTML = page.map((u, i) => {
-      const p    = u.profile;
-      const type = p?.user_type || 'die_hard_fan';
+      const p = u;
+      const type = u.level || 'd0';
       const time = u.star_time ? u.star_time.slice(0, 10) : '-';
       return `<tr>
         <td style="color:var(--text-4)">${start + i + 1}</td>
@@ -1269,7 +1180,7 @@ async function main() {
         <td>${p?.fans_count ?? '-'}</td>
         <td>${p?.original_repo_count ?? '-'}</td>
         <td>${p?.total_contributions ?? '-'}</td>
-        <td>${u.starred_repos?.length ?? '-'}</td>
+        <td>${u.starred_repos?.length ?? (u.sources?.includes('fork') ? 0 : '-')}</td>
         <td style="color:var(--text-3);font-size:12px">${time}</td>
       </tr>`;
     }).join('');
