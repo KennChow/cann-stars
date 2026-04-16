@@ -1,6 +1,6 @@
 """
-CANN GitCode 数据采集器
-采集 gitcode.com/cann 组织下所有仓库的统计数据，以及每个仓库的 star 用户画像。
+指定 GitCode 仓库数据采集器
+采集 cann/ge、cann/hixl 与 Ascend/torchair 的统计数据，以及每个仓库的 star 用户画像。
 
 用法:
     python collector.py repos          # 采集所有仓库基本信息
@@ -34,9 +34,13 @@ if sys.platform == "win32":
 # ─── 配置 ────────────────────────────────────────────────────────────────────
 
 BASE_URL = "https://web-api.gitcode.com"
-ORG = "cann"
+TARGET_REPOS = ["cann/ge", "cann/hixl", "Ascend/torchair"]
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True)
+
+
+def active_repo_paths():
+    return TARGET_REPOS[:]
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -95,32 +99,14 @@ def load_json(path):
 
 def collect_repos():
     """
-    获取 cann 组织下所有仓库，并逐个请求详情（含 star/fork/issue 数）。
+    获取指定仓库列表，并逐个请求详情（含 star/fork/issue 数）。
     结果保存到 data/repos.json。
     """
     print("\n=== 步骤 1：采集仓库列表及详情 ===")
-
-    # 先获取全量列表（最多 100 条/页，总共不超过 200 条）
-    all_repos = []
-    page = 1
-    while True:
-        url = f"{BASE_URL}/api/v1/groups/{ORG}/projects?page={page}&per_page=50"
-        data = get(url)
-        if not data or not data.get("content"):
-            break
-        all_repos.extend(data["content"])
-        total = data.get("total", 0)
-        print(f"  已获取 {len(all_repos)}/{total} 个仓库 (第{page}页)")
-        if len(all_repos) >= total:
-            break
-        page += 1
-        time.sleep(REQUEST_DELAY)
-
-    print(f"  共 {len(all_repos)} 个仓库，开始获取详情...")
+    print(f"  目标仓库：{', '.join(TARGET_REPOS)}")
 
     repos_detail = []
-    for i, repo in enumerate(all_repos):
-        path = repo["path_with_namespace"]  # e.g. "cann/manifest"
+    for i, path in enumerate(TARGET_REPOS, start=1):
         encoded = urllib.parse.quote(path, safe="")
         url = f"{BASE_URL}/api/v1/projects/{encoded}"
         detail = get(url)
@@ -143,12 +129,11 @@ def collect_repos():
                 "language": detail.get("main_repository_language", [None])[0] if detail.get("main_repository_language") else None,
                 "visibility": detail.get("visibility", ""),
             })
-            print(f"  [{i+1}/{len(all_repos)}] {path}: star={repos_detail[-1]['star_count']} fork={repos_detail[-1]['forks_count']} issue={repos_detail[-1]['open_issues_count']}")
+            print(f"  [{i}/{len(TARGET_REPOS)}] {path}: star={repos_detail[-1]['star_count']} fork={repos_detail[-1]['forks_count']} issue={repos_detail[-1]['open_issues_count']}")
         else:
-            print(f"  [{i+1}/{len(all_repos)}] {path}: 获取失败")
+            print(f"  [{i}/{len(TARGET_REPOS)}] {path}: 获取失败")
         time.sleep(REQUEST_DELAY)
 
-    repos_detail.sort(key=lambda r: r["star_count"], reverse=True)
     save_json(DATA_DIR / "repos.json", repos_detail)
     print(f"\n  ✓ 已保存 {len(repos_detail)} 个仓库到 data/repos.json")
     return repos_detail
@@ -275,7 +260,8 @@ def collect_users():
 
     profiles_file = DATA_DIR / "user_profiles.json"
     # 加载已有进度
-    existing = load_json(profiles_file) or []
+    active_user_names = {u["user_name"] for u in all_users}
+    existing = [p for p in (load_json(profiles_file) or []) if p.get("user_name") in active_user_names]
     done_users = {p["user_name"] for p in existing}
     print(f"  已有 {len(done_users)} 位用户画像，待采集 {len(all_users) - len(done_users)} 位")
 
@@ -616,6 +602,7 @@ def generate_issue_summary():
     结果保存到 data/issue_summary.json，供前端图表使用。
     """
     print("\n=== 生成 Issue 解决时间汇总 ===")
+    active_paths = set(active_repo_paths())
 
     issues_dir = DATA_DIR / "issues"
     if not issues_dir.exists():
@@ -625,6 +612,8 @@ def generate_issue_summary():
     repos_data = []
     for f in sorted(issues_dir.glob("*.json")):
         repo_path = f.stem.replace("__", "/", 1)
+        if repo_path not in active_paths:
+            continue
         issues = load_json(f) or []
         closed = [i for i in issues if i.get("state") == "closed"
                   and i.get("closed_at") and i.get("created_at")]
@@ -663,6 +652,7 @@ def generate_mr_summary():
     结果保存到 data/mr_summary.json，供前端图表使用。
     """
     print("\n=== 生成 MR 状态汇总 ===")
+    active_paths = set(active_repo_paths())
 
     mrs_dir = DATA_DIR / "mrs"
     if not mrs_dir.exists():
@@ -673,6 +663,8 @@ def generate_mr_summary():
     all_authors = set()
     for f in sorted(mrs_dir.glob("*.json")):
         repo_path = f.stem.replace("__", "/", 1)
+        if repo_path not in active_paths:
+            continue
         mrs = load_json(f) or []
         merged = sum(1 for m in mrs if m.get("state") == "merged")
         open_  = sum(1 for m in mrs if m.get("state") == "opened")
@@ -706,6 +698,7 @@ def generate_weekly_activity():
     结果保存到 data/weekly_activity.json，供前端热力图使用。
     """
     print("\n=== 生成周粒度活跃度数据 ===")
+    active_paths = set(active_repo_paths())
 
     mrs_dir = DATA_DIR / "mrs"
     if not mrs_dir.exists():
@@ -717,6 +710,8 @@ def generate_weekly_activity():
 
     for f in sorted(mrs_dir.glob("*.json")):
         repo_path = f.stem.replace("__", "/", 1)
+        if repo_path not in active_paths:
+            continue
         mrs = load_json(f) or []
         weekly = {}
         for mr in mrs:
@@ -772,6 +767,7 @@ def generate_overview_data():
     结果保存到 data/org_timeline.json，供前端直接使用。
     """
     print("\n=== 生成概览聚合数据 ===")
+    active_paths = set(active_repo_paths())
 
     profiles = load_json(DATA_DIR / "user_profiles.json") or []
     profile_map = {p["user_name"]: p.get("user_type", "die_hard_fan") for p in profiles}
@@ -786,6 +782,9 @@ def generate_overview_data():
     total_events = 0
 
     for f in sorted(stars_dir.glob("*.json")):
+        repo_path = f.stem.replace("__", "/", 1)
+        if repo_path not in active_paths:
+            continue
         users = load_json(f) or []
         for u in users:
             created_at = u.get("created_at", "")

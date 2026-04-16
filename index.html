@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CANN GitCode 数据分析</title>
+  <title>GE / HIXL / TorchAir GitCode 数据分析</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
   <style>
     /* ── CSS 变量（dark 为默认） ───────────────────────────── */
@@ -96,6 +96,14 @@
     .repo-link { font-size: 13px; color: var(--accent); text-decoration: none; }
     .repo-link:hover { text-decoration: underline; }
 
+    .goal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 20px; }
+    .goal-box h2 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+    .goal-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .goal-item { border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; background: #7eb6ff12; }
+    .goal-item .goal-label { font-size: 12px; color: var(--text-2); margin-bottom: 8px; }
+    .goal-item .goal-target { font-size: 20px; font-weight: 700; color: var(--accent); }
+    .goal-item .goal-meta { font-size: 12px; color: var(--text-3); margin-top: 6px; line-height: 1.6; }
+
     .repo-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
     .repo-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 20px; flex: 1; min-width: 100px; }
     .repo-stat .val { font-size: 24px; font-weight: 700; color: var(--accent); }
@@ -177,7 +185,7 @@
 
 <header>
   <div class="header-text">
-    <h1>CANN GitCode 数据分析</h1>
+    <h1>GE / HIXL / TorchAir GitCode 数据分析</h1>
     <p id="update-time">数据加载中...</p>
     <p class="visit-counter">👁 本页访问 <span class="count" id="busuanzi_value_page_pv">--</span> 次 &nbsp;|&nbsp; 访客 <span class="count" id="busuanzi_value_site_uv">--</span> 人</p>
   </div>
@@ -251,6 +259,10 @@
       <a id="repo-ext-link" class="repo-link" href="#" target="_blank">在 GitCode 查看 →</a>
     </div>
     <div class="repo-stats" id="repo-stats"></div>
+    <div class="goal-box">
+      <h2>运营目标</h2>
+      <div class="goal-list" id="repo-goals"></div>
+    </div>
     <div class="chart-box" style="margin-bottom:20px">
       <h2>用户类型分布</h2>
       <div class="chart-legend-row">
@@ -345,7 +357,19 @@ const TYPE_LABELS = {
   die_hard_fan:   '铁粉',
 };
 
-const DATA_VER = '?v=17';
+const DATA_VER = '?v=18';
+const REPO_GOALS = {
+  'cann/ge': [
+    { label: '2026年上半年达到500', target: 500 },
+    { label: '2026年底达到1000', target: 1000 },
+  ],
+  'cann/hixl': [
+    { label: '2026年上半年达到700', target: 700 },
+  ],
+  'Ascend/torchair': [
+    { label: '2026年上半年达到700', target: 700 },
+  ],
+};
 async function loadJSON(path) {
   const r = await fetch(path + DATA_VER);
   return r.json();
@@ -441,7 +465,7 @@ async function main() {
   ).join('');
 
   document.getElementById('update-time').textContent =
-    `数据采集时间：${new Date().toLocaleDateString('zh')}  ·  gitcode.com/cann`;
+    `数据采集时间：${new Date().toLocaleDateString('zh')}  ·  目标仓库：cann/ge · cann/hixl · Ascend/torchair`;
 
   function renderOverviewCharts() {
   // 图1：各仓库 Star/Fork/Issue
@@ -926,6 +950,22 @@ async function main() {
     ].map(([lbl, val]) =>
       `<div class="repo-stat"><div class="val">${val ?? '-'}</div><div class="lbl">${lbl}</div></div>`
     ).join('');
+
+    const goalList = REPO_GOALS[repoPath] || [];
+    document.getElementById('repo-goals').innerHTML = goalList.map(goal => {
+      const gap = goal.target - repo.star_count;
+      const progress = goal.target > 0 ? Math.min(100, Math.round(repo.star_count / goal.target * 100)) : 0;
+      return `
+        <div class="goal-item">
+          <div class="goal-label">${goal.label}</div>
+          <div class="goal-target">⭐ ${goal.target}</div>
+          <div class="goal-meta">
+            当前 ${repo.star_count} Star<br/>
+            进度 ${progress}% · ${gap > 0 ? `还差 ${gap}` : '已达成'}
+          </div>
+        </div>
+      `;
+    }).join('') || '<div style="color:var(--text-3);font-size:12px">未配置运营目标</div>';
 
     // 类型分布饼图
     const tc = { contributor: 0, questioner: 0, developer: 0, star_enthusiast: 0, die_hard_fan: 0 };
