@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 14 * * *'   # 22:00 CST，每天增量更新
     - cron: '0 14 * * 0'   # 22:00 CST，每周日全量刷新用户画像
+  push:
+    branches: [main]
+    paths: ['config/repos.json']
   workflow_dispatch:
     inputs:
       full_refresh:
