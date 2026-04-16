@@ -36,13 +36,27 @@ if sys.platform == "win32":
 # ─── 配置 ────────────────────────────────────────────────────────────────────
 
 BASE_URL = "https://web-api.gitcode.com"
-TARGET_REPOS = ["cann/ge", "cann/hixl", "Ascend/torchair"]
+CONFIG_PATH = Path("config/repos.json")
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True)
 
 
+def load_repo_config():
+    if not CONFIG_PATH.exists():
+        raise FileNotFoundError(f"缺少配置文件: {CONFIG_PATH}")
+    config = load_json(CONFIG_PATH) or {"repos": []}
+    repos = config.get("repos", [])
+    if not repos:
+        raise ValueError("config/repos.json 中未配置任何仓库")
+    return repos
+
+
+def active_repo_configs():
+    return [repo for repo in load_repo_config() if repo.get("enabled", True)]
+
+
 def active_repo_paths():
-    return TARGET_REPOS[:]
+    return [repo["path"] for repo in active_repo_configs()]
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -105,10 +119,12 @@ def collect_repos():
     结果保存到 data/repos.json。
     """
     print("\n=== 步骤 1：采集仓库列表及详情 ===")
-    print(f"  目标仓库：{', '.join(TARGET_REPOS)}")
+    repo_configs = active_repo_configs()
+    target_paths = [repo["path"] for repo in repo_configs]
+    print(f"  目标仓库：{', '.join(target_paths)}")
 
     repos_detail = []
-    for i, path in enumerate(TARGET_REPOS, start=1):
+    for i, path in enumerate(target_paths, start=1):
         encoded = urllib.parse.quote(path, safe="")
         url = f"{BASE_URL}/api/v1/projects/{encoded}"
         detail = get(url)
@@ -131,9 +147,9 @@ def collect_repos():
                 "language": detail.get("main_repository_language", [None])[0] if detail.get("main_repository_language") else None,
                 "visibility": detail.get("visibility", ""),
             })
-            print(f"  [{i}/{len(TARGET_REPOS)}] {path}: star={repos_detail[-1]['star_count']} fork={repos_detail[-1]['forks_count']} issue={repos_detail[-1]['open_issues_count']}")
+            print(f"  [{i}/{len(target_paths)}] {path}: star={repos_detail[-1]['star_count']} fork={repos_detail[-1]['forks_count']} issue={repos_detail[-1]['open_issues_count']}")
         else:
-            print(f"  [{i}/{len(TARGET_REPOS)}] {path}: 获取失败")
+            print(f"  [{i}/{len(target_paths)}] {path}: 获取失败")
         time.sleep(REQUEST_DELAY)
 
     save_json(DATA_DIR / "repos.json", repos_detail)

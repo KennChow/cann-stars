@@ -1,0 +1,29 @@
+{
+  "repos": [
+    {
+      "path": "cann/ge",
+      "display_name": "GE",
+      "enabled": true,
+      "goals": [
+        { "label": "2026年上半年达到500", "target": 500 },
+        { "label": "2026年底达到1000", "target": 1000 }
+      ]
+    },
+    {
+      "path": "cann/hixl",
+      "display_name": "HIXL",
+      "enabled": true,
+      "goals": [
+        { "label": "2026年上半年达到700", "target": 700 }
+      ]
+    },
+    {
+      "path": "Ascend/torchair",
+      "display_name": "TorchAir",
+      "enabled": true,
+      "goals": [
+        { "label": "2026年上半年达到700", "target": 700 }
+      ]
+    }
+  ]
+}

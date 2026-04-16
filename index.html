@@ -350,18 +350,6 @@ const TYPE_LABELS = {
 };
 
 const DATA_VER = '?v=18';
-const REPO_GOALS = {
-  'cann/ge': [
-    { label: '2026年上半年达到500', target: 500 },
-    { label: '2026年底达到1000', target: 1000 },
-  ],
-  'cann/hixl': [
-    { label: '2026年上半年达到700', target: 700 },
-  ],
-  'Ascend/torchair': [
-    { label: '2026年上半年达到700', target: 700 },
-  ],
-};
 async function loadJSON(path) {
   const r = await fetch(path + DATA_VER);
   return r.json();
@@ -410,7 +398,8 @@ document.querySelectorAll('.tab').forEach(tab => {
 let repoTypeChart, repoTypeTimelineChart;
 
 async function main() {
-  const [repos, dlevelSummary, weeklyData, mrSummary, issueSummary] = await Promise.all([
+  const [repoConfig, repos, dlevelSummary, weeklyData, mrSummary, issueSummary] = await Promise.all([
+    loadJSON('config/repos.json'),
     loadJSON('data/repos.json'),
     loadJSON('data/dlevel_summary.json'),
     loadJSON('data/weekly_activity.json').catch(() => null),
@@ -418,6 +407,10 @@ async function main() {
     loadJSON('data/issue_summary.json').catch(() => null),
   ]);
 
+  const activeRepoConfigs = (repoConfig.repos || []).filter(repo => repo.enabled !== false);
+  const activeRepoPaths = new Set(activeRepoConfigs.map(repo => repo.path));
+  const repoConfigMap = Object.fromEntries(activeRepoConfigs.map(repo => [repo.path, repo]));
+  const scopedRepos = repos.filter(repo => activeRepoPaths.has(repo.path));
   const orgTimeline = dlevelSummary.star_timeline || [];
   const repoUserMap = dlevelSummary.repo_users || {};
   const repoCounts = dlevelSummary.repo_counts || {};
@@ -426,9 +419,9 @@ async function main() {
   // ════════════════════════════════════════════════════════
   // 概览面板
   // ════════════════════════════════════════════════════════
-  const totalStars  = repos.reduce((s, r) => s + r.star_count, 0);
-  const totalForks  = repos.reduce((s, r) => s + r.forks_count, 0);
-  const totalIssues = repos.reduce((s, r) => s + r.open_issues_count, 0);
+  const totalStars  = scopedRepos.reduce((s, r) => s + r.star_count, 0);
+  const totalForks  = scopedRepos.reduce((s, r) => s + r.forks_count, 0);
+  const totalIssues = scopedRepos.reduce((s, r) => s + r.open_issues_count, 0);
   const typeCounts  = { d0: globalCounts.d0 || 0, d1: globalCounts.d1 || 0, d2: globalCounts.d2 || 0 };
 
   document.getElementById('stats-row').innerHTML = [
@@ -444,12 +437,12 @@ async function main() {
   ).join('');
 
   document.getElementById('update-time').textContent =
-    `数据采集时间：${new Date().toLocaleDateString('zh')}  ·  目标仓库：cann/ge · cann/hixl · Ascend/torchair`;
+    `数据采集时间：${new Date().toLocaleDateString('zh')}  ·  目标仓库：${activeRepoConfigs.map(r => r.path).join(' · ')}`;
 
   function renderOverviewCharts() {
   // 图1：各仓库 Star/Fork/Issue
   {
-    const top   = repos.slice(0, 30);
+    const top   = scopedRepos.slice(0, 30);
     const names = top.map(r => r.path.split('/')[1]);
     const chart = makeChart('chart-repos');
     chart.setOption({
@@ -507,7 +500,7 @@ async function main() {
 
   // 图3：各仓库 D0 占比
   {
-    const rows = repos.map(r => {
+    const rows = scopedRepos.map(r => {
       const counts = repoCounts[r.path] || { d0: 0, total: 0 };
       const rate = counts.total > 0 ? counts.d0 / counts.total * 100 : 0;
       return { name: r.path.split('/')[1], rate, total: counts.total };
@@ -650,7 +643,7 @@ async function main() {
 
   // 图7：各仓库 D0/D1/D2 构成（百分比/绝对值切换）
   {
-    const top20 = repos.filter(r => r.star_count > 0).slice(0, 20).reverse();
+    const top20 = scopedRepos.filter(r => r.star_count > 0).slice(0, 20).reverse();
     const repoNames = top20.map(r => r.path.split('/')[1]);
     const TYPE_KEYS = ['d0', 'd1', 'd2'];
 
@@ -846,7 +839,7 @@ async function main() {
 
   // 填充仓库下拉
   const select = document.getElementById('repo-select');
-  repos.forEach(r => {
+  scopedRepos.forEach(r => {
     const opt = document.createElement('option');
     opt.value = r.path;
     opt.textContent = `${r.path.split('/')[1]}  (⭐${r.star_count})`;
@@ -885,7 +878,7 @@ async function main() {
       `<div class="repo-stat"><div class="val">${val ?? '-'}</div><div class="lbl">${lbl}</div></div>`
     ).join('');
 
-    const goalList = REPO_GOALS[repoPath] || [];
+    const goalList = repoConfigMap[repoPath]?.goals || [];
     document.getElementById('repo-goals').innerHTML = goalList.map(goal => {
       const gap = goal.target - repo.star_count;
       const progress = goal.target > 0 ? Math.min(100, Math.round(repo.star_count / goal.target * 100)) : 0;

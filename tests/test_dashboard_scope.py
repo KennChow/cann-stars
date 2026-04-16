@@ -6,24 +6,34 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DashboardScopeTests(unittest.TestCase):
+    def test_repo_config_contains_requested_repos_and_goals(self):
+        cfg = json.loads((ROOT / 'config' / 'repos.json').read_text(encoding='utf-8'))
+        repos = cfg['repos']
+        enabled_paths = [repo['path'] for repo in repos if repo.get('enabled', True)]
+        self.assertEqual(enabled_paths, ['cann/ge', 'cann/hixl', 'Ascend/torchair'])
+        goals = {repo['path']: repo['goals'] for repo in repos}
+        self.assertEqual(goals['cann/ge'][0]['target'], 500)
+        self.assertEqual(goals['cann/ge'][1]['target'], 1000)
+        self.assertEqual(goals['cann/hixl'][0]['target'], 700)
+        self.assertEqual(goals['Ascend/torchair'][0]['target'], 700)
+
     def test_repos_json_only_contains_requested_repos(self):
         repos = json.loads((ROOT / 'data' / 'repos.json').read_text(encoding='utf-8'))
         paths = [repo['path'] for repo in repos]
         self.assertEqual(paths, ['cann/ge', 'cann/hixl', 'Ascend/torchair'])
 
-    def test_collector_targets_only_requested_repos(self):
+    def test_collector_uses_config_file_for_repo_scope(self):
         collector = (ROOT / 'collector.py').read_text(encoding='utf-8')
-        self.assertIn('TARGET_REPOS', collector)
-        self.assertIn('cann/ge', collector)
-        self.assertIn('cann/hixl', collector)
-        self.assertIn('Ascend/torchair', collector)
+        self.assertIn('config/repos.json', collector)
+        self.assertIn('load_repo_config', collector)
+        self.assertIn('active_repo_paths', collector)
 
-    def test_dashboard_contains_operation_goals(self):
+    def test_dashboard_reads_goals_from_config_data_not_hardcoded_constant(self):
         html = (ROOT / 'index.html').read_text(encoding='utf-8')
+        self.assertIn("loadJSON('config/repos.json')", html)
+        self.assertNotIn('const REPO_GOALS = {', html)
+        self.assertIn('repoConfigMap', html)
         self.assertIn('运营目标', html)
-        self.assertIn('2026年上半年达到700', html)
-        self.assertIn('2026年上半年达到500', html)
-        self.assertIn('2026年底达到1000', html)
 
     def test_dashboard_uses_d_level_labels_and_meaning_text(self):
         html = (ROOT / 'index.html').read_text(encoding='utf-8')
