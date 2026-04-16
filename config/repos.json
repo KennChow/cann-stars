@@ -19,7 +19,7 @@
     },
     {
       "path": "cann/graph-autofusion",
-      "display_name": "AutoFusion",
+      "display_name": "auto-fusion",
       "enabled": true,
       "goals": [
         { "label": "2026年上半年达到500", "target": 500 }
