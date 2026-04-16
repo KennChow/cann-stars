@@ -18,6 +18,14 @@
       ]
     },
     {
+      "path": "CANN/graph-autofusion",
+      "display_name": "AutoFusion",
+      "enabled": true,
+      "goals": [
+        { "label": "2026年上半年达到500", "target": 500 }
+      ]
+    },
+    {
       "path": "Ascend/torchair",
       "display_name": "TorchAir",
       "enabled": true,
