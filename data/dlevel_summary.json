@@ -2,20 +2,20 @@
   "generated_at": "2026-04-17",
   "global_counts": {
     "d0": 885,
-    "d1": 432,
-    "d2": 421,
-    "total": 1738
+    "d1": 436,
+    "d2": 422,
+    "total": 1743
   },
   "repo_counts": {
     "cann/ge": {
-      "d0": 384,
-      "d1": 166,
-      "d2": 129,
-      "total": 679
+      "d0": 385,
+      "d1": 165,
+      "d2": 130,
+      "total": 680
     },
     "cann/hixl": {
-      "d0": 463,
-      "d1": 82,
+      "d0": 462,
+      "d1": 83,
       "d2": 17,
       "total": 562
     },
@@ -26,16 +26,16 @@
       "total": 368
     },
     "cann/torchtitan-npu": {
-      "d0": 52,
-      "d1": 4,
+      "d0": 51,
+      "d1": 7,
       "d2": 0,
-      "total": 56
+      "total": 58
     },
     "Ascend/torchair": {
       "d0": 497,
-      "d1": 223,
+      "d1": 225,
       "d2": 282,
-      "total": 1002
+      "total": 1004
     }
   },
   "repo_users": {
@@ -251,10 +251,11 @@
       {
         "user_name": "Archerls",
         "nick_name": "Archerls",
-        "level": "d1",
+        "level": "d2",
         "sources": [
           "fork",
-          "pr"
+          "pr",
+          "merged_pr"
         ],
         "star_time": "",
         "fans_count": null,
@@ -1232,7 +1233,7 @@
       },
       {
         "user_name": "Reyn52166",
-        "nick_name": "Reyn52166",
+        "nick_name": "leihuan1",
         "level": "d0",
         "sources": [
           "star",
@@ -5454,7 +5455,7 @@
       },
       {
         "user_name": "lijunyu_111",
-        "nick_name": "lijunyu_111",
+        "nick_name": "李俊谕",
         "level": "d2",
         "sources": [
           "star",
@@ -7204,6 +7205,21 @@
         ]
       },
       {
+        "user_name": "qq_43411072",
+        "nick_name": "小龙胡巴",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-17T03:30:50.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 0,
+        "total_contributions": 0,
+        "starred_repos": [
+          "cann/ge"
+        ]
+      },
+      {
         "user_name": "qq_44437024",
         "nick_name": "qq_44437024",
         "level": "d1",
@@ -8156,7 +8172,7 @@
       },
       {
         "user_name": "turing_yhy",
-        "nick_name": "turing_yhy",
+        "nick_name": "yanhaiyan",
         "level": "d0",
         "sources": [
           "star"
@@ -12130,7 +12146,7 @@
       },
       {
         "user_name": "Reyn52166",
-        "nick_name": "Reyn52166",
+        "nick_name": "leihuan1",
         "level": "d0",
         "sources": [
           "star"
@@ -15844,10 +15860,11 @@
       {
         "user_name": "luhengh",
         "nick_name": "luhengh",
-        "level": "d0",
+        "level": "d1",
         "sources": [
           "star",
-          "fork"
+          "fork",
+          "pr"
         ],
         "star_time": "2025-12-30T06:14:50.000+00:00",
         "fans_count": 0,
@@ -21012,7 +21029,7 @@
       },
       {
         "user_name": "Reyn52166",
-        "nick_name": "Reyn52166",
+        "nick_name": "leihuan1",
         "level": "d0",
         "sources": [
           "star"
@@ -23293,7 +23310,7 @@
       },
       {
         "user_name": "lijunyu_111",
-        "nick_name": "lijunyu_111",
+        "nick_name": "李俊谕",
         "level": "d0",
         "sources": [
           "star"
@@ -27012,9 +27029,10 @@
       {
         "user_name": "hitwdy",
         "nick_name": "1Fire4",
-        "level": "d0",
+        "level": "d1",
         "sources": [
-          "star"
+          "star",
+          "pr"
         ],
         "star_time": "2026-01-31T02:17:43.000+00:00",
         "fans_count": 0,
@@ -27113,6 +27131,21 @@
           "cann/graph-autofusion",
           "cann/torchtitan-npu",
           "Ascend/torchair"
+        ]
+      },
+      {
+        "user_name": "m0_46282705",
+        "nick_name": "朱建伟",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-17T14:13:10.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 0,
+        "total_contributions": 0,
+        "starred_repos": [
+          "cann/torchtitan-npu"
         ]
       },
       {
@@ -27480,9 +27513,10 @@
       {
         "user_name": "zhaiyukun",
         "nick_name": "zhaiyukun",
-        "level": "d0",
+        "level": "d1",
         "sources": [
-          "star"
+          "star",
+          "pr"
         ],
         "star_time": "2026-04-17T01:39:22.000+00:00",
         "fans_count": 0,
@@ -27614,6 +27648,20 @@
           "cann/torchtitan-npu",
           "Ascend/torchair"
         ]
+      },
+      {
+        "user_name": "zouqian",
+        "nick_name": "zouqian",
+        "level": "d1",
+        "sources": [
+          "fork",
+          "pr"
+        ],
+        "star_time": "",
+        "fans_count": null,
+        "original_repo_count": null,
+        "total_contributions": null,
+        "starred_repos": []
       },
       {
         "user_name": "zqmin",
@@ -27815,6 +27863,21 @@
         "fans_count": 0,
         "original_repo_count": 0,
         "total_contributions": 28,
+        "starred_repos": [
+          "Ascend/torchair"
+        ]
+      },
+      {
+        "user_name": "AbrahamCaiJin",
+        "nick_name": "AbrahamCaiJin",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-17T05:07:12.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 1,
+        "total_contributions": 23,
         "starred_repos": [
           "Ascend/torchair"
         ]
@@ -29039,7 +29102,7 @@
       },
       {
         "user_name": "Reyn52166",
-        "nick_name": "Reyn52166",
+        "nick_name": "leihuan1",
         "level": "d0",
         "sources": [
           "star"
@@ -36292,6 +36355,19 @@
         ]
       },
       {
+        "user_name": "m0_57943685",
+        "nick_name": "m0_57943685",
+        "level": "d1",
+        "sources": [
+          "issue"
+        ],
+        "star_time": "",
+        "fans_count": null,
+        "original_repo_count": null,
+        "total_contributions": null,
+        "starred_repos": []
+      },
+      {
         "user_name": "m0_58016603",
         "nick_name": "m0_58016603",
         "level": "d1",
@@ -42630,10 +42706,11 @@
       {
         "user_name": "zhoulong50_hw",
         "nick_name": "zhoulong50",
-        "level": "d0",
+        "level": "d1",
         "sources": [
           "star",
-          "fork"
+          "fork",
+          "issue"
         ],
         "star_time": "2026-04-16T06:54:27.000+00:00",
         "fans_count": 0,
@@ -43192,16 +43269,16 @@
     },
     {
       "month": "2025-12",
-      "d0": 664,
-      "d1": 40,
+      "d0": 663,
+      "d1": 41,
       "d2": 83,
       "new_stars": 787,
       "cumulative": 1337
     },
     {
       "month": "2026-01",
-      "d0": 149,
-      "d1": 27,
+      "d0": 148,
+      "d1": 28,
       "d2": 15,
       "new_stars": 191,
       "cumulative": 1528
@@ -43224,11 +43301,11 @@
     },
     {
       "month": "2026-04",
-      "d0": 135,
-      "d1": 15,
+      "d0": 136,
+      "d1": 17,
       "d2": 8,
-      "new_stars": 158,
-      "cumulative": 2014
+      "new_stars": 161,
+      "cumulative": 2017
     }
   ]
 }

@@ -1,5 +1,14 @@
 [
   {
+    "user_name": "qq_43411072",
+    "nick_name": "小龙胡巴",
+    "user_id": 1121268,
+    "avatar": "https://cdn-img.gitcode.com/bc/ab/bc4ab5271659eb28952d75c5c26464592400e1f951d2753eb3c9eef86898ff53.png",
+    "starred_repos": [
+      "cann/ge"
+    ]
+  },
+  {
     "user_name": "whitelee3",
     "nick_name": "whitelee3",
     "user_id": 7246551,
@@ -1499,7 +1508,7 @@
   },
   {
     "user_name": "turing_yhy",
-    "nick_name": "turing_yhy",
+    "nick_name": "yanhaiyan",
     "user_id": 6487442,
     "avatar": null,
     "starred_repos": [
@@ -1590,7 +1599,7 @@
   },
   {
     "user_name": "lijunyu_111",
-    "nick_name": "lijunyu_111",
+    "nick_name": "李俊谕",
     "user_id": 7312839,
     "avatar": null,
     "starred_repos": [
@@ -2724,7 +2733,7 @@
   },
   {
     "user_name": "Reyn52166",
-    "nick_name": "Reyn52166",
+    "nick_name": "leihuan1",
     "user_id": 6491521,
     "avatar": null,
     "starred_repos": [
@@ -7503,6 +7512,15 @@
     ]
   },
   {
+    "user_name": "m0_46282705",
+    "nick_name": "朱建伟",
+    "user_id": 1715163,
+    "avatar": "https://cdn-img.gitcode.com/bd/df/649322b77502ddf1ce5022c2fd073e08639117efac2cd181029262c023ac6958.png",
+    "starred_repos": [
+      "cann/torchtitan-npu"
+    ]
+  },
+  {
     "user_name": "zhaiyukun",
     "nick_name": "zhaiyukun",
     "user_id": 7120175,
@@ -7610,6 +7628,15 @@
     "avatar": "",
     "starred_repos": [
       "cann/torchtitan-npu"
+    ]
+  },
+  {
+    "user_name": "AbrahamCaiJin",
+    "nick_name": "AbrahamCaiJin",
+    "user_id": 2740104,
+    "avatar": "https://cdn-img.gitcode.com/af/bf/a637f05bfa670640ec591c4bbbe3d25f20c87381737942c7444da7793883fd96.png",
+    "starred_repos": [
+      "Ascend/torchair"
     ]
   },
   {

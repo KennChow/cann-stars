@@ -1,5 +1,16 @@
 [
   {
+    "user_name": "qq_43411072",
+    "nick_name": "小龙胡巴",
+    "starred_repos": [
+      "cann/ge"
+    ],
+    "user_type": "die_hard_fan",
+    "fans_count": 0,
+    "original_repo_count": 0,
+    "total_contributions": 0
+  },
+  {
     "user_name": "whitelee3",
     "nick_name": "whitelee3",
     "starred_repos": [
@@ -1809,7 +1820,7 @@
   },
   {
     "user_name": "turing_yhy",
-    "nick_name": "turing_yhy",
+    "nick_name": "yanhaiyan",
     "starred_repos": [
       "cann/ge"
     ],
@@ -1920,7 +1931,7 @@
   },
   {
     "user_name": "lijunyu_111",
-    "nick_name": "lijunyu_111",
+    "nick_name": "李俊谕",
     "starred_repos": [
       "cann/ge",
       "cann/graph-autofusion"
@@ -2277,7 +2288,7 @@
       "cann/graph-autofusion",
       "Ascend/torchair"
     ],
-    "user_type": "questioner",
+    "user_type": "contributor",
     "fans_count": 0,
     "original_repo_count": 0,
     "total_contributions": 128
@@ -3262,7 +3273,7 @@
   },
   {
     "user_name": "Reyn52166",
-    "nick_name": "Reyn52166",
+    "nick_name": "leihuan1",
     "starred_repos": [
       "cann/ge",
       "cann/hixl",
@@ -8948,7 +8959,7 @@
       "cann/torchtitan-npu",
       "Ascend/torchair"
     ],
-    "user_type": "developer",
+    "user_type": "contributor",
     "fans_count": 0,
     "original_repo_count": 0,
     "total_contributions": 380
@@ -8987,12 +8998,23 @@
     "total_contributions": 628
   },
   {
+    "user_name": "m0_46282705",
+    "nick_name": "朱建伟",
+    "starred_repos": [
+      "cann/torchtitan-npu"
+    ],
+    "user_type": "die_hard_fan",
+    "fans_count": 0,
+    "original_repo_count": 0,
+    "total_contributions": 0
+  },
+  {
     "user_name": "zhaiyukun",
     "nick_name": "zhaiyukun",
     "starred_repos": [
       "cann/torchtitan-npu"
     ],
-    "user_type": "developer",
+    "user_type": "contributor",
     "fans_count": 0,
     "original_repo_count": 0,
     "total_contributions": 687
@@ -9121,12 +9143,23 @@
     "total_contributions": 198
   },
   {
+    "user_name": "AbrahamCaiJin",
+    "nick_name": "AbrahamCaiJin",
+    "starred_repos": [
+      "Ascend/torchair"
+    ],
+    "user_type": "developer",
+    "fans_count": 0,
+    "original_repo_count": 1,
+    "total_contributions": 23
+  },
+  {
     "user_name": "zhoulong50_hw",
     "nick_name": "zhoulong50",
     "starred_repos": [
       "Ascend/torchair"
     ],
-    "user_type": "developer",
+    "user_type": "questioner",
     "fans_count": 0,
     "original_repo_count": 0,
     "total_contributions": 234
