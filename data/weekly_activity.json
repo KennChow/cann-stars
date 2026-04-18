@@ -300,7 +300,7 @@
     {
       "name": "ge",
       "path": "cann/ge",
-      "total": 2017,
+      "total": 2030,
       "data": [
         0,
         0,
@@ -445,13 +445,13 @@
         229,
         141,
         89,
-        179
+        192
       ]
     },
     {
       "name": "hixl",
       "path": "cann/hixl",
-      "total": 392,
+      "total": 393,
       "data": [
         0,
         0,
@@ -596,13 +596,13 @@
         37,
         18,
         18,
-        21
+        22
       ]
     },
     {
       "name": "graph-autofusion",
       "path": "cann/graph-autofusion",
-      "total": 272,
+      "total": 277,
       "data": [
         0,
         0,
@@ -747,13 +747,13 @@
         42,
         26,
         19,
-        20
+        25
       ]
     },
     {
       "name": "torchtitan-npu",
       "path": "cann/torchtitan-npu",
-      "total": 3,
+      "total": 4,
       "data": [
         0,
         0,
@@ -887,7 +887,7 @@
         0,
         0,
         0,
-        0,
+        1,
         0,
         0,
         0,
@@ -902,5 +902,5 @@
       ]
     }
   ],
-  "generated_at": "2026-04-17"
+  "generated_at": "2026-04-18"
 }

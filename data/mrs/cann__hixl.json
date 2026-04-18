@@ -1,5 +1,13 @@
 [
   {
+    "iid": 393,
+    "state": "opened",
+    "created_at": "2026-04-18",
+    "merged_at": "",
+    "closed_at": "",
+    "author": "lining23666"
+  },
+  {
     "iid": 392,
     "state": "merged",
     "created_at": "2026-04-17",
@@ -17,9 +25,9 @@
   },
   {
     "iid": 390,
-    "state": "opened",
+    "state": "merged",
     "created_at": "2026-04-17",
-    "merged_at": "",
+    "merged_at": "2026-04-18",
     "closed_at": "",
     "author": "luhengh"
   },
@@ -217,9 +225,9 @@
   },
   {
     "iid": 365,
-    "state": "opened",
+    "state": "merged",
     "created_at": "2026-04-10",
-    "merged_at": "",
+    "merged_at": "2026-04-18",
     "closed_at": "",
     "author": "lining23666"
   },

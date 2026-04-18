@@ -11,31 +11,31 @@
       "name": "ge",
       "path": "cann/ge",
       "merged": 1139,
-      "open": 195,
-      "total": 1334
+      "open": 196,
+      "total": 1335
     },
     {
       "name": "hixl",
       "path": "cann/hixl",
-      "merged": 317,
-      "open": 30,
-      "total": 347
+      "merged": 319,
+      "open": 29,
+      "total": 348
     },
     {
       "name": "graph-autofusion",
       "path": "cann/graph-autofusion",
-      "merged": 201,
+      "merged": 206,
       "open": 24,
-      "total": 225
+      "total": 230
     },
     {
       "name": "torchtitan-npu",
       "path": "cann/torchtitan-npu",
       "merged": 0,
-      "open": 3,
-      "total": 3
+      "open": 4,
+      "total": 4
     }
   ],
   "unique_authors": 565,
-  "generated_at": "2026-04-17"
+  "generated_at": "2026-04-18"
 }

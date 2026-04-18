@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-04-17",
+  "generated_at": "2026-04-18",
   "global_counts": {
-    "d0": 885,
+    "d0": 890,
     "d1": 436,
-    "d2": 422,
-    "total": 1743
+    "d2": 423,
+    "total": 1749
   },
   "repo_counts": {
     "cann/ge": {
       "d0": 385,
-      "d1": 165,
+      "d1": 166,
       "d2": 130,
-      "total": 680
+      "total": 681
     },
     "cann/hixl": {
       "d0": 462,
-      "d1": 83,
-      "d2": 17,
+      "d1": 82,
+      "d2": 18,
       "total": 562
     },
     "cann/graph-autofusion": {
@@ -26,10 +26,10 @@
       "total": 368
     },
     "cann/torchtitan-npu": {
-      "d0": 51,
-      "d1": 7,
+      "d0": 57,
+      "d1": 8,
       "d2": 0,
-      "total": 58
+      "total": 65
     },
     "Ascend/torchair": {
       "d0": 497,
@@ -786,6 +786,7 @@
         "level": "d2",
         "sources": [
           "fork",
+          "issue",
           "pr",
           "merged_pr"
         ],
@@ -954,6 +955,7 @@
         "sources": [
           "star",
           "fork",
+          "issue",
           "pr",
           "merged_pr"
         ],
@@ -5331,6 +5333,19 @@
         ]
       },
       {
+        "user_name": "liaomaohahaha",
+        "nick_name": "liaomaohahaha",
+        "level": "d1",
+        "sources": [
+          "issue"
+        ],
+        "star_time": "",
+        "fans_count": null,
+        "original_repo_count": null,
+        "total_contributions": null,
+        "starred_repos": []
+      },
+      {
         "user_name": "libotao316",
         "nick_name": "libotao316",
         "level": "d1",
@@ -5865,6 +5880,7 @@
           "cann/ge",
           "cann/hixl",
           "cann/graph-autofusion",
+          "cann/torchtitan-npu",
           "Ascend/torchair"
         ]
       },
@@ -15665,6 +15681,7 @@
           "cann/ge",
           "cann/hixl",
           "cann/graph-autofusion",
+          "cann/torchtitan-npu",
           "Ascend/torchair"
         ]
       },
@@ -15860,11 +15877,12 @@
       {
         "user_name": "luhengh",
         "nick_name": "luhengh",
-        "level": "d1",
+        "level": "d2",
         "sources": [
           "star",
           "fork",
-          "pr"
+          "pr",
+          "merged_pr"
         ],
         "star_time": "2025-12-30T06:14:50.000+00:00",
         "fans_count": 0,
@@ -23592,6 +23610,7 @@
           "cann/ge",
           "cann/hixl",
           "cann/graph-autofusion",
+          "cann/torchtitan-npu",
           "Ascend/torchair"
         ]
       },
@@ -26818,6 +26837,36 @@
         ]
       },
       {
+        "user_name": "T0mZhu",
+        "nick_name": "T0mZhu",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-17T14:13:10.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 0,
+        "total_contributions": 0,
+        "starred_repos": [
+          "cann/torchtitan-npu"
+        ]
+      },
+      {
+        "user_name": "Xtdzs",
+        "nick_name": "Jinliang Gao",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-18T02:18:51.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 0,
+        "total_contributions": 1,
+        "starred_repos": [
+          "cann/torchtitan-npu"
+        ]
+      },
+      {
         "user_name": "bigheadincharge",
         "nick_name": "未生",
         "level": "d0",
@@ -26903,6 +26952,22 @@
           "cann/hixl",
           "cann/graph-autofusion",
           "cann/torchtitan-npu"
+        ]
+      },
+      {
+        "user_name": "cui_jiahao",
+        "nick_name": "cui_jiahao",
+        "level": "d1",
+        "sources": [
+          "pr"
+        ],
+        "star_time": "",
+        "fans_count": 0,
+        "original_repo_count": 3,
+        "total_contributions": 8560,
+        "starred_repos": [
+          "cann/ge",
+          "cann/graph-autofusion"
         ]
       },
       {
@@ -27114,6 +27179,25 @@
         ]
       },
       {
+        "user_name": "liuyuanchen1",
+        "nick_name": "刘原辰",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-18T01:53:51.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 1,
+        "total_contributions": 656,
+        "starred_repos": [
+          "cann/ge",
+          "cann/hixl",
+          "cann/graph-autofusion",
+          "cann/torchtitan-npu",
+          "Ascend/torchair"
+        ]
+      },
+      {
         "user_name": "lrwei0709",
         "nick_name": "weijinyi",
         "level": "d1",
@@ -27134,13 +27218,13 @@
         ]
       },
       {
-        "user_name": "m0_46282705",
-        "nick_name": "朱建伟",
+        "user_name": "m0_73924041",
+        "nick_name": "m0_73924041",
         "level": "d0",
         "sources": [
           "star"
         ],
-        "star_time": "2026-04-17T14:13:10.000+00:00",
+        "star_time": "2026-04-18T02:01:00.000+00:00",
         "fans_count": 0,
         "original_repo_count": 0,
         "total_contributions": 0,
@@ -27252,6 +27336,21 @@
         ]
       },
       {
+        "user_name": "rearranger",
+        "nick_name": "无敌胡子球手",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-18T02:38:40.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 0,
+        "total_contributions": 0,
+        "starred_repos": [
+          "cann/torchtitan-npu"
+        ]
+      },
+      {
         "user_name": "s003576sgd",
         "nick_name": "sgd",
         "level": "d0",
@@ -27265,6 +27364,21 @@
         "starred_repos": [
           "cann/torchtitan-npu",
           "Ascend/torchair"
+        ]
+      },
+      {
+        "user_name": "six2714",
+        "nick_name": "six灬",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-18T02:17:58.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 0,
+        "total_contributions": 0,
+        "starred_repos": [
+          "cann/torchtitan-npu"
         ]
       },
       {
@@ -27378,6 +27492,21 @@
           "cann/ge",
           "cann/hixl",
           "cann/graph-autofusion",
+          "cann/torchtitan-npu"
+        ]
+      },
+      {
+        "user_name": "weixin_47893573",
+        "nick_name": "千山儿",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-18T02:03:52.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 0,
+        "total_contributions": 0,
+        "starred_repos": [
           "cann/torchtitan-npu"
         ]
       },
@@ -35915,6 +36044,7 @@
           "cann/ge",
           "cann/hixl",
           "cann/graph-autofusion",
+          "cann/torchtitan-npu",
           "Ascend/torchair"
         ]
       },
@@ -43270,8 +43400,8 @@
     {
       "month": "2025-12",
       "d0": 663,
-      "d1": 41,
-      "d2": 83,
+      "d1": 40,
+      "d2": 84,
       "new_stars": 787,
       "cumulative": 1337
     },
@@ -43301,11 +43431,11 @@
     },
     {
       "month": "2026-04",
-      "d0": 136,
+      "d0": 142,
       "d1": 17,
       "d2": 8,
-      "new_stars": 161,
-      "cumulative": 2017
+      "new_stars": 167,
+      "cumulative": 2023
     }
   ]
 }

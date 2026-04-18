@@ -5,7 +5,7 @@
       "path": "cann/ge",
       "avg_days": 10.2,
       "closed": 278,
-      "opened": 27
+      "opened": 30
     },
     {
       "name": "hixl",
@@ -17,9 +17,9 @@
     {
       "name": "graph-autofusion",
       "path": "cann/graph-autofusion",
-      "avg_days": 18.9,
-      "closed": 38,
-      "opened": 1
+      "avg_days": 18.4,
+      "closed": 39,
+      "opened": 0
     },
     {
       "name": "torchair",
@@ -29,5 +29,5 @@
       "opened": 15
     }
   ],
-  "generated_at": "2026-04-17"
+  "generated_at": "2026-04-18"
 }
