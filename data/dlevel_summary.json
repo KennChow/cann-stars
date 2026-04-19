@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-04-18",
+  "generated_at": "2026-04-19",
   "global_counts": {
-    "d0": 890,
-    "d1": 436,
+    "d0": 891,
+    "d1": 437,
     "d2": 423,
-    "total": 1749
+    "total": 1751
   },
   "repo_counts": {
     "cann/ge": {
       "d0": 385,
-      "d1": 166,
+      "d1": 167,
       "d2": 130,
-      "total": 681
+      "total": 682
     },
     "cann/hixl": {
       "d0": 462,
@@ -26,10 +26,10 @@
       "total": 368
     },
     "cann/torchtitan-npu": {
-      "d0": 57,
+      "d0": 58,
       "d1": 8,
       "d2": 0,
-      "total": 65
+      "total": 66
     },
     "Ascend/torchair": {
       "d0": 497,
@@ -8728,6 +8728,20 @@
           "cann/hixl",
           "cann/graph-autofusion"
         ]
+      },
+      {
+        "user_name": "weixin_39625247",
+        "nick_name": "GaoGeolone",
+        "level": "d1",
+        "sources": [
+          "fork",
+          "pr"
+        ],
+        "star_time": "",
+        "fans_count": null,
+        "original_repo_count": null,
+        "total_contributions": null,
+        "starred_repos": []
       },
       {
         "user_name": "weixin_39767879",
@@ -27511,6 +27525,21 @@
         ]
       },
       {
+        "user_name": "weixin_69777180",
+        "nick_name": "孙仲锟",
+        "level": "d0",
+        "sources": [
+          "star"
+        ],
+        "star_time": "2026-04-19T10:17:51.000+00:00",
+        "fans_count": 0,
+        "original_repo_count": 0,
+        "total_contributions": 1,
+        "starred_repos": [
+          "cann/torchtitan-npu"
+        ]
+      },
+      {
         "user_name": "wqtshg_wt",
         "nick_name": "王涛",
         "level": "d0",
@@ -43431,11 +43460,11 @@
     },
     {
       "month": "2026-04",
-      "d0": 142,
+      "d0": 143,
       "d1": 17,
       "d2": 8,
-      "new_stars": 167,
-      "cumulative": 2023
+      "new_stars": 168,
+      "cumulative": 2024
     }
   ]
 }
